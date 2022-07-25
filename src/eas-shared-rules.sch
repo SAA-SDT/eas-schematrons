@@ -184,7 +184,6 @@
         <sch:let name="qualifier" value="'[~%?]?'"/>   
         <sch:let name="months" value="1 to 12"/>
         <sch:let name="seasons" value="21 to 41"/>
-        
         <!-- 
         this keeps Y limited to 10 digits since the saxon parser for xs:gYear does the same.
         but it also allows Y to start with '+', even though that is not permitted by Saxon...
@@ -196,10 +195,7 @@
         <sch:let name="D" value="'(([0X][1-9X])|([012X][0-9X])|([3X][0-1X]))'"/>
         <sch:let name="T" value="'[T| ](0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(?:Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$'"/>
         
-        <sch:let name="iso8601-regex" value="concat('^', $qualifier, $Y, $qualifier, '$','|'
-            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|'
-            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|'
-            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
+        <sch:let name="iso8601-regex" value="concat('^', $qualifier, $Y, $qualifier, '$','|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
         
         <sch:rule context="*:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | *:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
             <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
@@ -211,40 +207,27 @@
         </sch:rule>
        
     </sch:pattern>
-    
-    <!-- needs another approach, or perhaps only test if 
-        there aren't values like 19X2  ?
-        right now, it sort of works, but not with negative dates.
-        e.g. -1800..0002
-        that should be valid, but right now the process is comparing 1800 and 2, rather than -1800 and 2.
- 
-    <sch:pattern id="date-range-comparisons">
-        <sch:rule context="*:date[matches(@standardDate, '[0-9X]/[0-9X]')]">
+
+
+    <sch:pattern id="simple-date-range-comparisons">
+        <sch:rule context="*:date[matches(@standardDate, '[0-9]/[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
-            <sch:let name="end_date" value="if (contains(@standardDate, 'T')) 
-                then substring-after(substring-before(@standardDate, 'T'), '/') else substring-after(@standardDate, '/')"/>
-            
-            <sch:assert test="replace(replace($end_date, 'X', '0'), '-', '') >= replace(replace($begin_date, 'X', '0'), '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
+            <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
+            <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>  
+            <sch:assert test="if ($testable_dates) then $end_date gt $begin_date else true()">
+                The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
             </sch:assert>
         </sch:rule>
-        
-        <sch:rule context="*:date[matches(@standardDate, '[0-9X]\.\.[0-9X]')]">
-            
+        <sch:rule context="*:date[matches(@standardDate, '[0-9]\.\.[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
-            
-            <sch:let name="end_date" value="if (matches(@standardDate, 'T'))
-                then substring-after(substring-before(@standardDate, 'T'), '..')
-                else if (matches(@standardDate, ' '))
-                then substring-after(substring-before(@standardDate, ' '), '..')
-                else substring-after(@standardDate, '..')"/>
-            
-            <sch:assert test="replace($end_date, '-', '') >= replace($begin_date, '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
+            <sch:let name="end_date" value="substring-after(@standardDate, '..')"/>         
+            <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>
+            <sch:assert test="if ($testable_dates) then $end_date gt $begin_date else true()">
+                The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
             </sch:assert>
         </sch:rule>
     </sch:pattern>
-    -->
 
-    
     <!-- REGEX patterns -->
     <sch:let name="iso15511-regex" xml:id="iso15511" value="'(^([A-Z]{2})|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$'"/>
     <sch:let name="ietf-regex" xml:id="ietf"/>
