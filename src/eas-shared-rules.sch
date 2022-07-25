@@ -48,7 +48,7 @@
         </sch:rule>
     </sch:pattern>
     
-    <!-- SCRIPT CODES (in process) -->
+    <!-- SCRIPT CODES -->
     <sch:pattern>
         <sch:rule context="*[exists(@scriptCode | @scriptOfElement)][$check-script-codes]">
             <sch:let name="code" value="normalize-space(.)"/>
@@ -56,7 +56,7 @@
         </sch:rule>
     </sch:pattern>
     
-    <!-- REPOSITORY CODES (in process; also need a test for agency codes and ISIL?) -->
+    <!-- REPOSITORY CODES (also need a test for agency codes and ISIL?) -->
     <sch:pattern>
         <sch:rule context="*[@repositoryCode][$check-repository-codes]">
             <sch:assert test="matches(@repositoryCode, $iso15511-regex)">If the repositoryencoding is set to ISO 15511, then the format of the value of the <sch:emph>repositoryCode</sch:emph> attribute of <sch:name/> is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a dash, and an identifier.</sch:assert>
@@ -147,6 +147,8 @@
         for instance, we do not currently provide support support decade, week, dayo, dayk, 
         date sets, etc.
         
+        [T]([01][1-9]|[2][0-3])[:]([0-5][0-9])[:]([0-5][0-9])([+|-]([01][0-9]|[2][0-3])[:]([0-5][0-9])){0,1}
+        
         ranges:
             ..
             /
@@ -156,6 +158,7 @@
              as is ..1899
              as is 1899..2999
              as is 1899/2999
+             
              what about?
                 1899..0009    
                 1899/0009
@@ -169,7 +172,7 @@
          toDate
             @notBefore | @notAfter | @standardDate
             
-         only date/@standardDate should permit ranges, right?
+         only date/@standardDate should permit ranges, right? right.
          
         -->
     
@@ -188,58 +191,51 @@
         but it is by ISO:8601:2019...right? 
         -->
         <sch:let name="Y" value="'[+-]?(([0-9X])([0-9X]{3})|([1-9X])([0-9X]{4,9}))'"/>   
-        <sch:let name="M" value="'(' || (string-join(for $x in ($months) return format-number($x, '00'), '|')) || '|([0-1X])([0-9X]))'"/>
-        <sch:let name="M_S" value="'(' || (string-join(for $x in ($months, $seasons) return format-number($x, '00'), '|')) || '|([0-1X])([0-9X]))'"/>
+        <sch:let name="M" value="'(' || (string-join(for $x in ($months) return format-number($x, '00'), '|')) || '|([0-1]X)|' || 'X[0-9])'"/>
+        <sch:let name="M_S" value="'(' || (string-join(for $x in ($months, $seasons) return format-number($x, '00'), '|')) || '|([0-1]X)|' || 'X[0-9])'"/>
         <sch:let name="D" value="'(([0X][1-9X])|([012X][0-9X])|([3X][0-1X]))'"/>
+        <sch:let name="T" value="'[T| ](0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(?:Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$'"/>
         
-        <!-- also need to add time support -->
-        <sch:let name="iso8601-regex" value="concat(
-            '^', $qualifier, $Y, $qualifier, '$','|'
+        <sch:let name="iso8601-regex" value="concat('^', $qualifier, $Y, $qualifier, '$','|'
             , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|'
-            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$'
-            )"/>
+            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|'
+            , '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
         
-        <sch:rule context="*:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
-            <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must be a iso8601 date.</sch:assert>
+        <sch:rule context="*:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | *:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
+            <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
+        </sch:rule>
+        
+        <!-- and for date ranges -->
+        <sch:rule context="*:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
+            <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
+        </sch:rule>
+       
+    </sch:pattern>
+    
+    <sch:pattern>
+        <sch:rule context="*:date[matches(@standardDate, '[0-9X]/[0-9X]')]">
+            <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
+            <sch:let name="end_date" value="if (contains(@standardDate, 'T')) 
+                then substring-after(substring-before(@standardDate, 'T'), '/') else substring-after(@standardDate, '/')"/>
+            
+            <sch:assert test="replace(replace($end_date, 'X', '0'), '-', '') >= replace(replace($begin_date, 'X', '0'), '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <span class="italic">before</span> the end date, <xsl:value-of select="$end_date"/>
+            </sch:assert>
+        </sch:rule>
+        
+        <sch:rule context="*:date[matches(@standardDate, '[0-9X]\.\.[0-9X]')]">
+            
+            <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
+            
+            <sch:let name="end_date" value="if (matches(@standardDate, 'T'))
+                then substring-after(substring-before(@standardDate, 'T'), '..')
+                else substring-after(@standardDate, '..')"/>
+            
+            <sch:assert test="replace($end_date, '-', '') >= replace($begin_date, '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <span class="italic">before</span> the end date, <xsl:value-of select="$end_date"/>
+            </sch:assert>
         </sch:rule>
     </sch:pattern>
     
-    <!-- 
-        
-    
-         <rule context="*:date[matches(@standardDate, '[0-9X]/[0-9X]')]">
-         
-            <let name="begin_date" value="substring-before(@standardDate, '/')"/>
-            
-            <let name="end_date" value="if (contains(@standardDate, 'T')) 
-            then substring-after(substring-before(@standardDate, 'T'), '/')
-            else
-            substring-after(@standardDate, '/')"/>
-            
-            
-            <assert test="replace(replace($end_date, 'X', '0'), '-', '') >= replace(replace($begin_date, 'X', '0'), '-', '')">
-            The standardDate attribute value for this field needs to be updated. The first date, <value-of
-                    select="$begin_date"/>, is encoded as occurring <span class="italic"
-                        >before</span> the end date, <value-of select="$end_date"/>
-            </assert>
-        </rule>
-        
-        <rule context="*:unitdate[matches(@standardDate, '[0-9X]\.\.[0-9X]')]">
-        
-            <let name="begin_date" value="substring-before(@standardDate, '..')"/>
-            
-            <let name="end_date" value="if (contains(@standardDate, 'T')) 
-            then substring-after(substring-before(@standardDate, 'T'), '..')
-            else
-            substring-after(@standardDate, '..')"/>
-           
-            
-            <assert test="replace($end_date, '-', '') >= replace($begin_date, '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <value-of
-                    select="$begin_date"/>, is encoded as occurring <span class="italic"
-                        >before</span> the end date, <value-of select="$end_date"/>
-            </assert>
-        </rule>
-    -->
+
     
     <!-- REGEX patterns -->
     <sch:let name="iso15511-regex" xml:id="iso15511" value="'(^([A-Z]{2})|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$'"/>
