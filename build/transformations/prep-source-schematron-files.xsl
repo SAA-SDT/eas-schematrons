@@ -50,7 +50,11 @@
         </xd:desc>
     </xd:doc>
     <xsl:template match="@value[contains(., '*')]|@context[contains(., '*')]|@test[contains(., '*')]" priority="2">
-        <xsl:attribute name="{local-name()}" select="replace(., '\*:', $schema || ':') => replace('\*\[', $schema || ':*[') => replace('\*/', $schema || ':' || $schema || '/')"/>
+        <xsl:attribute name="{local-name()}"
+            select="replace(., '//\*/', '//' || $schema || ':*/')
+            => replace('\*:', $schema || ':')
+            => replace('\*\[', $schema || ':*[')
+            "/>
     </xsl:template>
     
 
