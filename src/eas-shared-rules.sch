@@ -228,6 +228,8 @@
             
             <sch:let name="end_date" value="if (matches(@standardDate, 'T'))
                 then substring-after(substring-before(@standardDate, 'T'), '..')
+                else if (matches(@standardDate, ' '))
+                then substring-after(substring-before(@standardDate, ' '), '..')
                 else substring-after(@standardDate, '..')"/>
             
             <sch:assert test="replace($end_date, '-', '') >= replace($begin_date, '-', '')">The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <span class="italic">before</span> the end date, <xsl:value-of select="$end_date"/>
