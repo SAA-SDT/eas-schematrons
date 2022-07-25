@@ -212,7 +212,13 @@
        
     </sch:pattern>
     
-    <sch:pattern>
+    <!-- needs another approach, or perhaps only test if 
+        there aren't values like 19X2  ?
+        right now, it sort of works, but not with negative dates.
+        e.g. -1800..0002
+        that should be valid, but right now the process is comparing 1800 and 2, rather than -1800 and 2.
+ 
+    <sch:pattern id="date-range-comparisons">
         <sch:rule context="*:date[matches(@standardDate, '[0-9X]/[0-9X]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
             <sch:let name="end_date" value="if (contains(@standardDate, 'T')) 
@@ -236,7 +242,7 @@
             </sch:assert>
         </sch:rule>
     </sch:pattern>
-    
+    -->
 
     
     <!-- REGEX patterns -->
