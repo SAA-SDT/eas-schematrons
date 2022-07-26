@@ -210,7 +210,7 @@
 
 
     <sch:pattern id="simple-date-range-comparisons">
-        <sch:rule context="*:date[matches(@standardDate, '[0-9]/[0-9]')]">
+        <sch:rule context="*:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
             <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
             <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>  
@@ -218,7 +218,7 @@
                 The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
             </sch:assert>
         </sch:rule>
-        <sch:rule context="*:date[matches(@standardDate, '[0-9]\.\.[0-9]')]">
+        <sch:rule context="*:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
             <sch:let name="end_date" value="substring-after(@standardDate, '..')"/>         
             <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>
