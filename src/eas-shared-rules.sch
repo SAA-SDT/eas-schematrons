@@ -202,6 +202,7 @@
         </sch:rule>
         
         <!-- and for date ranges -->
+        <!-- to be more accurate, we might want to rule out the possiblity of repeating values, like 1899//..//2901 ?-->
         <sch:rule context="*:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
             <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
         </sch:rule>
