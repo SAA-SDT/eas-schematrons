@@ -146,17 +146,23 @@ ts-eas@archivists.org
     
     <!-- combine similar functions (at least the next two) and update to use a parameter, instead -->
     <xsl:function name="mdc:create639-1-regex" as="xs:string">
-        <xsl:variable name="values">
-            <xsl:sequence select="sort($iso-639-1-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()]) => string-join('|')"/>
+        <xsl:variable name="sorted-values" as="item()*">
+            <xsl:sequence select="sort($iso-639-1-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()])"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^', $values, '?')"/>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $sorted-values return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create639-2b-regex" as="xs:string">
-        <xsl:variable name="values">
-            <xsl:sequence select="sort($iso-639-2b-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()]) => string-join('|')"/>
+        <xsl:variable name="sorted-values" as="item()*">
+            <xsl:sequence select="sort($iso-639-2b-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()])"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^', $values, '?')"/>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $sorted-values return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create639-3-regex" as="xs:string">
@@ -167,15 +173,20 @@ ts-eas@archivists.org
                 </code>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="values" select="string-join($lines//code, '|')"/>
-        <xsl:value-of select="concat('^', $values, '?')"/>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $lines//code return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create3166-regex" as="xs:string">
-        <xsl:variable name="values">
-            <xsl:sequence select="string-join($iso-3166-file//iso_3166_entry/@alpha_2_code, '|')"/>
+        <xsl:variable name="values" as="item()*">
+            <xsl:sequence select="$iso-3166-file//iso_3166_entry/@alpha_2_code"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^', $values, '?')"/>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $values return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create15924-regex" as="xs:string">
@@ -186,8 +197,10 @@ ts-eas@archivists.org
                 </code>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="values" select="string-join($lines//code, '|')"/>
-        <xsl:value-of select="concat('^', $values, '?')"/>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $lines//code return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
     
