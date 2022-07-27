@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2022-07-27T17:30:37.50356-04:00
+2022-07-27T17:36:25.140884-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -44,12 +44,12 @@ ts-eas@archivists.org
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="eac:*[@countryCode][$check-country-codes]">
-         <sch:assert test="matches(@countryCode, $iso3166-regex)">The countrycode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
+         <sch:assert test="matches(@countryCode, $iso3166-regex)">The countryCode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="eac:*[@scriptCode | @scriptOfElement][$check-script-codes]">
-         <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)"> The script or scriptcode attribute should contain a code from the ISO 15924 code list.</sch:assert>
+         <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)">The scriptOfElement or scriptCode attribute should contain a code from the ISO 15924 code list.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>

@@ -43,14 +43,14 @@
     <!-- COUNTRY CODES -->
     <sch:pattern>
         <sch:rule context="*[@countryCode][$check-country-codes]">
-            <sch:assert test="matches(@countryCode, $iso3166-regex)">The countrycode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
+            <sch:assert test="matches(@countryCode, $iso3166-regex)">The countryCode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
         </sch:rule>
     </sch:pattern>
     
     <!-- SCRIPT CODES -->
     <sch:pattern>
         <sch:rule context="*[@scriptCode | @scriptOfElement][$check-script-codes]">
-            <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)"> The script or scriptcode attribute should contain a code from the ISO 15924 code list.</sch:assert>
+            <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)">The scriptOfElement or scriptCode attribute should contain a code from the ISO 15924 code list.</sch:assert>
         </sch:rule>
     </sch:pattern>
     
