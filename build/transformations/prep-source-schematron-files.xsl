@@ -37,6 +37,18 @@
         <xsl:for-each select="$source-file">
             <xsl:result-document href="../schematron/{$filename}">
                 <xsl:copy>
+                    <xsl:comment expand-text="true">
+<xsl:text>
+This schematron file has been generated automatically, and was last updated at: 
+{current-dateTime()}
+                        
+If you would like to contribute to this project, please see: 
+https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
+                        
+Comments, questions, and suggestions may be addressed to: 
+ts-eas@archivists.org
+</xsl:text>
+                    </xsl:comment>
                     <xsl:apply-templates select="@*|node()"/>
                 </xsl:copy>
             </xsl:result-document>
@@ -47,6 +59,7 @@
     <xd:doc>
         <xd:desc>
             <xd:p>Replace source values of "*" with relevant schema info, e.g. eac (for document element name or namespace prefix)</xd:p>
+            <xd:p>This is an admittedly bad approach, so update this later :)</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:template match="@value[contains(., '*')]|@context[contains(., '*')]|@test[contains(., '*')]" priority="2">
@@ -131,19 +144,19 @@
     
 
     
-    <!-- combine similar functions and update to use a parameter, instead -->
+    <!-- combine similar functions (at least the next two) and update to use a parameter, instead -->
     <xsl:function name="mdc:create639-1-regex" as="xs:string">
         <xsl:variable name="values">
-            <xsl:sequence select="string-join($iso-639-1-file//*:Authority/tokenize(@*:about, '/')[last()], '|')"/>
+            <xsl:sequence select="sort($iso-639-1-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()]) => string-join('|')"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^(', $values, ')?')"/>
+        <xsl:value-of select="concat('^', $values, '?')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create639-2b-regex" as="xs:string">
         <xsl:variable name="values">
-            <xsl:sequence select="string-join($iso-639-2b-file//*:Authority/tokenize(@*:about, '/')[last()], '|')"/>
+            <xsl:sequence select="sort($iso-639-2b-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()]) => string-join('|')"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^(', $values, ')?')"/>
+        <xsl:value-of select="concat('^', $values, '?')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create639-3-regex" as="xs:string">
@@ -155,26 +168,26 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values" select="string-join($lines//code, '|')"/>
-        <xsl:value-of select="concat('^(', $values, ')?')"/>
+        <xsl:value-of select="concat('^', $values, '?')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create3166-regex" as="xs:string">
         <xsl:variable name="values">
             <xsl:sequence select="string-join($iso-3166-file//iso_3166_entry/@alpha_2_code, '|')"/>
         </xsl:variable>
-        <xsl:value-of select="concat('^(', $values, ')?')"/>
+        <xsl:value-of select="concat('^', $values, '?')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create15924-regex" as="xs:string">
         <xsl:variable name="lines">
-            <xsl:for-each select="tokenize($iso-15924-file, $newline)[matches(., '^\w{4};')]">
+            <xsl:for-each select="tokenize($iso-15924-file, $newline)[matches(., '^\w{4};')][not(contains(., 'private use'))]">
                 <code>
                     <xsl:value-of select="tokenize(., ';')[1]"/> 
                 </code>
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values" select="string-join($lines//code, '|')"/>
-        <xsl:value-of select="concat('^(', $values, ')?')"/>
+        <xsl:value-of select="concat('^', $values, '?')"/>
     </xsl:function>
     
     
@@ -198,7 +211,7 @@
     <xd:doc>
         <xd:desc>
             <xd:p><xd:b>Author:</xd:b> mholmes</xd:p>
-            <xd:p>Quick transformer to generate XML from the IANA Language Subtag Registry</xd:p>
+            <xd:p>Quick transformer to generate XML from the IANA Language Subtag Registry. Updated slightly to filter out local codes, such as 'qaa'.</xd:p>
             <xd:p><xd:b>Source:</xd:b>  https://github.com/projectEndings/diagnostics/tree/dev/utilities</xd:p>
         </xd:desc>
     </xd:doc>
@@ -217,10 +230,11 @@
         </xsl:variable>
         <xsl:variable name="registry">
             <registry>
+                <!-- added a filter to remove those entries that are reserved for "Private use".  Cannot rely on the scope element, since that isn't always present -->
                 <xsl:for-each select="distinct-values($entries//Type)">
                     <xsl:variable name="thisType" select="."/>
                     <xsl:element name="{concat(., 's')}">
-                        <xsl:copy-of select="$entries//entry[Type = $thisType]"/>
+                        <xsl:copy-of select="$entries//entry[Type = $thisType][Description[not(matches(., '^Private', 'i'))]]"/>
                     </xsl:element>
                 </xsl:for-each>
             </registry>
