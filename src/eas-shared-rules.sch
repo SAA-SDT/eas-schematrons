@@ -19,47 +19,45 @@
     <!-- LANGUAGE CODE TESTS (in process) -->
     <sch:pattern>
         
-        <sch:rule context="*[exists(@languageCode | @languageOfElement)][$languageEncoding-of-document eq 'iso639-1']">
+        <sch:rule context="*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-1']">
             <!-- for every @lang or @langcode attribute, test that it is equal to a value in the relevant language code list -->
-            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches(normalize-space($l), $iso639-1-regex)">The <sch:name/> element's lang or langcode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
+            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-1-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
         </sch:rule>
         
-        <sch:rule context="*[exists(@languageCode | @languageOfElement)][$languageEncoding-of-document eq 'iso639-2b']">
+        <sch:rule context="*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-2b']">
             <!-- for every @lang or @langcode attribute, test that it is equal to a value in the relevant language code list -->
-            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches(normalize-space($l), $iso639-2b-regex)">The <sch:name/> element's lang or langcode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
+            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-2b-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
         </sch:rule>
         
-        <sch:rule context="*[exists(@languageCode | @languageOfElement)][$languageEncoding-of-document eq 'iso639-3']">
+        <sch:rule context="*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-3']">
             <!-- for every @lang or @langcode attribute, test that it is equal to a value in the relevant language code list -->
-            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches(normalize-space($l), $iso639-3-regex)">The <sch:name/> element's lang or langcode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
+            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-3-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
         </sch:rule>
         
-        <sch:rule context="*[exists(@languageCode | @languageOfElement)][$languageEncoding-of-document eq 'ietf-bcp-47']">
+        <sch:rule context="*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'ietf-bcp-47']">
             <!-- for every @lang or @langcode attribute, test that it is equal to a value in the relevant language code list -->
-            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches(normalize-space($l), $ietf-regex)">The <sch:name/> element's lang or langcode attribute should contain a value from the 'ietf-bcp-47' code list.</sch:assert>
+            <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $ietf-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the 'ietf-bcp-47' code list.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <!-- COUNTRY CODES -->
     <sch:pattern>
-        <sch:rule context="*[exists(@countryCode)][$check-country-codes]">
-            <sch:let name="code" value="normalize-space(@countryCode)"/>
-            <sch:assert test="$code eq $iso3166-regex">The countrycode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
+        <sch:rule context="*[@countryCode][$check-country-codes]">
+            <sch:assert test="matches(@countryCode, $iso3166-regex)">The countrycode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
         </sch:rule>
     </sch:pattern>
     
     <!-- SCRIPT CODES -->
     <sch:pattern>
-        <sch:rule context="*[exists(@scriptCode | @scriptOfElement)][$check-script-codes]">
-            <sch:let name="code" value="normalize-space(.)"/>
-            <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches(normalize-space($s), $iso15924-regex)"> The script or scriptcode attribute should contain a code from the ISO 15924 code list.</sch:assert>
+        <sch:rule context="*[@scriptCode | @scriptOfElement][$check-script-codes]">
+            <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)"> The script or scriptcode attribute should contain a code from the ISO 15924 code list.</sch:assert>
         </sch:rule>
     </sch:pattern>
     
     <!-- REPOSITORY CODES (also need a test for agency codes and ISIL?) -->
     <sch:pattern>
-        <sch:rule context="*[@repositoryCode][$check-repository-codes]">
-            <sch:assert test="matches(@repositoryCode, $iso15511-regex)">If the repositoryencoding is set to ISO 15511, then the format of the value of the <sch:emph>repositoryCode</sch:emph> attribute of <sch:name/> is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a dash, and an identifier.</sch:assert>
+        <sch:rule context="*:agencyCode[$check-repository-codes]">
+            <sch:assert test="matches(normalize-space(.), $iso15511-regex)">If the repositoryEncoding is set to ISO 15511, then the format of the value of the <sch:emph>agencyCode</sch:emph> element is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a dash, and an identifier.</sch:assert>
         </sch:rule>
     </sch:pattern>
     
@@ -214,7 +212,7 @@
         <sch:rule context="*:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
             <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
-            <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>  
+            <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or $d castable as xs:gYear or $d castable as xs:gYearMonth)"/>  
             <sch:assert test="if ($testable_dates) then $end_date gt $begin_date else true()">
                 The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
             </sch:assert>
