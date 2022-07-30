@@ -228,7 +228,7 @@
     </sch:pattern>
 
     <!-- REGEX patterns -->
-    <sch:let name="iso15511-regex" xml:id="iso15511" value="'^(([A-Z]{2})|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$'"/>
+    <sch:let name="iso15511-regex" xml:id="iso15511"/>
     <sch:let name="ietf-regex" xml:id="ietf"/>
     <sch:let name="iso639-1-regex" xml:id="iso639-1"/>
     <sch:let name="iso639-2b-regex" xml:id="iso639-2b"/>

@@ -85,67 +85,25 @@ ts-eas@archivists.org
     </xd:doc>
     <xsl:template match="sch:ns[not(@prefix = $schema)]"/>
     
-    
-    
-    <xsl:template match="sch:let[@xml:id eq 'iso639-1']">
+    <!-- works, for now, but change this approach later.-->
+    <xsl:template match="sch:let[@xml:id = ('iso15511', 'iso639-1', 'iso639-2b', 'iso639-3', 'iso3166', 'iso15924')]">
+        <xsl:variable name="regex-function-for-current-iso-code" select="'mdc:create-' || @xml:id || '-regex'"/>       
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="value">
                 <xsl:text>'</xsl:text>
-                <xsl:value-of select="mdc:create639-1-regex()"/>
+                <xsl:value-of select="function-lookup(xs:QName($regex-function-for-current-iso-code), 0)()"/>
                 <xsl:text>'</xsl:text>
             </xsl:attribute>
         </xsl:copy>
     </xsl:template>
-    
-    <xsl:template match="sch:let[@xml:id eq 'iso639-2b']">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:attribute name="value">
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="mdc:create639-2b-regex()"/>
-                <xsl:text>'</xsl:text>
-            </xsl:attribute>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="sch:let[@xml:id eq 'iso639-3']">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:attribute name="value">
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="mdc:create639-3-regex()"/>
-                <xsl:text>'</xsl:text>
-            </xsl:attribute>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="sch:let[@xml:id eq 'iso3166']">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:attribute name="value">
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="mdc:create3166-regex()"/>
-                <xsl:text>'</xsl:text>
-            </xsl:attribute>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="sch:let[@xml:id eq 'iso15924']">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:attribute name="value">
-                <xsl:text>'</xsl:text>
-                <xsl:value-of select="mdc:create15924-regex()"/>
-                <xsl:text>'</xsl:text>
-            </xsl:attribute>
-        </xsl:copy>
-    </xsl:template>
-    
 
-    
     <!-- combine similar functions (at least the next two) and update to use a parameter, instead -->
-    <xsl:function name="mdc:create639-1-regex" as="xs:string">
+    <xsl:function name="mdc:create-iso15511-regex" as="xs:string">
+        <xsl:text>^(([A-Z]{2})|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$</xsl:text>
+    </xsl:function>
+    
+    <xsl:function name="mdc:create-iso639-1-regex" as="xs:string">
         <xsl:variable name="sorted-values" as="item()*">
             <xsl:sequence select="sort($iso-639-1-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()])"/>
         </xsl:variable>
@@ -155,7 +113,7 @@ ts-eas@archivists.org
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
-    <xsl:function name="mdc:create639-2b-regex" as="xs:string">
+    <xsl:function name="mdc:create-iso639-2b-regex" as="xs:string">
         <xsl:variable name="sorted-values" as="item()*">
             <xsl:sequence select="sort($iso-639-2b-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()])"/>
         </xsl:variable>
@@ -165,7 +123,7 @@ ts-eas@archivists.org
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
-    <xsl:function name="mdc:create639-3-regex" as="xs:string">
+    <xsl:function name="mdc:create-iso639-3-regex" as="xs:string">
         <xsl:variable name="lines">
             <xsl:for-each select="tokenize($iso-639-3-file, $newline)[position() gt 1]">
                 <code>
@@ -179,7 +137,7 @@ ts-eas@archivists.org
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
-    <xsl:function name="mdc:create3166-regex" as="xs:string">
+    <xsl:function name="mdc:create-iso3166-regex" as="xs:string">
         <xsl:variable name="values" as="item()*">
             <xsl:sequence select="$iso-3166-file//iso_3166_entry/@alpha_2_code"/>
         </xsl:variable>
@@ -189,7 +147,7 @@ ts-eas@archivists.org
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
     
-    <xsl:function name="mdc:create15924-regex" as="xs:string">
+    <xsl:function name="mdc:create-iso15924-regex" as="xs:string">
         <xsl:variable name="lines">
             <xsl:for-each select="tokenize($iso-15924-file, $newline)[matches(., '^\w{4};')][not(contains(., 'private use'))]">
                 <code>
