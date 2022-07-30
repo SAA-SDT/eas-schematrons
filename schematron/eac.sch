@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2022-07-30T14:01:17.477578-04:00
+2022-07-30T14:15:29.172945-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -134,7 +134,8 @@ ts-eas@archivists.org
       </sch:rule>
       <sch:rule context="eac:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
          <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
-         <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))&gt;=3">This date expression has too many range operators.  Only a single "/" or ".." is permitted.</sch:report>
+         <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))&gt;=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
+         <sch:report test="matches(normalize-space(@standardDate), '^/|/$')">The date expression should not start or end with a "/" character.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="simple-date-range-comparisons">
