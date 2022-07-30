@@ -97,10 +97,20 @@ ts-eas@archivists.org
             </xsl:attribute>
         </xsl:copy>
     </xsl:template>
+    
+    <xsl:function name="mdc:get-countryCode-regex" as="xs:string">
+        <xsl:variable name="values" as="item()*">
+            <xsl:sequence select="$iso-3166-file//iso_3166_entry/@alpha_2_code"/>
+        </xsl:variable>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $values return '(' || $code || ')'"/>
+        </xsl:variable>
+        <xsl:value-of select="string-join($prepared-values, '|')"/>
+    </xsl:function>
 
     <!-- combine similar functions (at least the next two) and update to use a parameter, instead -->
     <xsl:function name="mdc:create-iso15511-regex" as="xs:string">
-        <xsl:text>^(([A-Z]{2})|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$</xsl:text>
+        <xsl:value-of select="concat('^(', mdc:get-countryCode-regex(), '|([a-zA-Z]{1})|([a-zA-Z]{3,4}))(-[a-zA-Z0-9:/\-]{1,11})$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create-iso639-1-regex" as="xs:string">
@@ -138,13 +148,7 @@ ts-eas@archivists.org
     </xsl:function>
     
     <xsl:function name="mdc:create-iso3166-regex" as="xs:string">
-        <xsl:variable name="values" as="item()*">
-            <xsl:sequence select="$iso-3166-file//iso_3166_entry/@alpha_2_code"/>
-        </xsl:variable>
-        <xsl:variable name="prepared-values" as="item()*">
-            <xsl:sequence select="for $code in $values return '(' || $code || ')'"/>
-        </xsl:variable>
-        <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
+        <xsl:value-of select="concat('^(', mdc:get-countryCode-regex(), ')$')"/>
     </xsl:function>
     
     <xsl:function name="mdc:create-iso15924-regex" as="xs:string">
