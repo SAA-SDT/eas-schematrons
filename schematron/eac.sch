@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2022-07-30T14:15:29.172945-04:00
+2022-07-31T16:47:47.525966-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -54,7 +54,7 @@ ts-eas@archivists.org
    </sch:pattern>
    <sch:pattern>
       <sch:rule context="eac:agencyCode[$check-repository-codes]">
-         <sch:assert test="matches(normalize-space(.), $iso15511-regex)">If the repositoryEncoding is set to ISO 15511, then the format of the value of the <sch:emph>agencyCode</sch:emph> element is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a dash, and an identifier.</sch:assert>
+         <sch:assert test="matches(normalize-space(.), $iso15511-regex)">If the repositoryEncoding is set to ISO 15511, then the format of the value of the <sch:emph>agencyCode</sch:emph> element is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a hyphen, and an identifier.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
@@ -136,6 +136,18 @@ ts-eas@archivists.org
          <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
          <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))&gt;=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
          <sch:report test="matches(normalize-space(@standardDate), '^/|/$')">The date expression should not start or end with a "/" character.</sch:report>
+      </sch:rule>
+   </sch:pattern>
+   <sch:pattern id="leap-year-tests">
+      <sch:rule context="eac:*[$check-date-attributes][matches(replace((@notBefore | @notAfter | @standardDate), '[%~?]', ''), '-02-')]">
+         <sch:let name="year-string"
+                  value="substring-before((@notBefore | @notAfter | @standardDate), '-') =&gt; replace('[+%~?]', '')"/>
+         <sch:let name="year"
+                  value="if ($year-string castable as xs:gYear) then xs:integer($year-string) else false()"/>
+         <sch:let name="leap-year"
+                  value="if ($year) then (($year mod 4 = 0 and                 $year mod 100 != 0) or                 $year mod 400 = 0) else false()"/>
+         <sch:report test="every $d in (@notBefore | @notAfter | @standardDate) satisfies matches(replace($d, '[%~?]', ''), '-02-30|-02-31')">February dates cannot have a day value of 30 or 31.</sch:report>
+         <sch:report test="$year and not($leap-year) and matches(replace((@notBefore | @notAfter | @standardDate), '[%~?]', ''), '-02-29')">February 29th may only be encoded for leap years. The year encoded in this attribute, <xsl:value-of select="$year-string"/>, however, is not a valid leap year.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="simple-date-range-comparisons">
