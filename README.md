@@ -47,7 +47,7 @@ The TS-EAS Schematron files currently specify the following tests:
             - contains numeric characters, or an X to indicate an unknown value, according to the new EDTF features provided in ISO 8601:2019. e.g. "192X" is valid.
         - a Year, a hyphen separtor (intended to not be optional in our subprofile of ISO 8601), and a Season, which must have a value of 21 to 41, according to ISO 8601:2019
         - a Year, a hyphen separator, and a Month, which must include a value from 01 (for January) to 12 (for December). Unknown values can optionally be indicated with an "X".
-        - a Year, a hyphen separator, a Month, a hyphen seprator, and a Day, which must be include two characters in the range of 01 to 31, with an optional X to indicate an unknown value. February-specifc and valid leap days are not currently tested.
+        - a Year, a hyphen separator, a Month, a hyphen seprator, and a Day, which must be include two characters in the range of 01 to 31, with an optional X to indicate an unknown value. If the month is February, then 30 and 31 will be invalid values, and 29 should only be valid for leap years.
         - a Year, a hyphen seprator, a Month, a hyphen seprator, a Day, and a Time, which can either start with a "T" or a " ".
         - a qualifier that precedes or follows any of those parts. The valid qualifiers are "?" (i.e. uncertain), "~" (i.e. approximate), and "%" (i.e. uncertain and approximate). 
     1. @notAfter and @notBefore must not contain any date ranges, which may be specified with ".." and "/". If date ranges are required, then those should only be encoded within a @standardDate attribute that is present on a date element (not a fromDate or toDate element). 
