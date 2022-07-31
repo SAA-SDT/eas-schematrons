@@ -12,24 +12,24 @@ Implementers might also choose to add additional tests, depending on their own l
 
 The TS-EAS Schematron files currently specify the following tests:
 
-- If and only if a language encoding of iso639-1, iso639-2b, iso639-3, or ietf-bcp-47, then every languageOfElement
+- If and only if a language encoding of iso639-1, iso639-2b, iso639-3, or ietf-bcp-47 is set in the control section, then every languageOfElement
  and languageCode attribute in the document will be tested against a regular expression pattern that adheres to that specific standard.
-  - For example, if either iso639-1 or ietf-bcp-47 is set in the control section, then a value of "fr" will validate because those two characters are found in the regular expression pattern.
+  - For example, if either iso639-1 or ietf-bcp-47 is set in the control section, then a value of "fr" will validate because those two characters are found in the associated regular expression pattern.
 
 - The countryCode attribute will be validated against ISO 3166-1, unless eac:control/@contryEncoding is set to "otherCountryEncoding".
 
 - All scriptCode and scriptOfElement attributes will be validated against ISO 15924, unless eac:control/@scriptEncoding is set to "otherScriptEncoding".
 
-- The text value of the agencyCode element will be validated against a expression value that adheres to the ISO 15511 standard, unless eac:control/@repostioryEncoding is set to "otherRepositoryEncoding". The regular expression requires a prefix, a dash ("-"), and an identifier. 
-    - The prefix must either match a country code from ISO 3166-1, or it must include three to four characters, with a mix of cases (e.g. "oclc", "EUR", and "SzB" would all be valid). 
-    - The identifier that follows the dash, can be 1 to 11 characters long and include a mix of A-Z characters in either case, numeric characters from 0-9, as well as any of the additional three characters: ":", "/", and "-".
+- The text value of the agencyCode element will be validated against a expression value that adheres to the ISO 15511 standard, unless eac:control/@repostioryEncoding is set to "otherRepositoryEncoding". The regular expression requires a prefix, a hyphen ("-"), and an identifier. 
+    - The prefix must either match a country code from ISO 3166-1, or it must include three to four characters in the A to Z range, regardless of case (e.g. "oclc", "EUR", and "SzB" are all valid prefixes). 
+    - The identifier that follows the hyphen can be 1 to 11 characters long and include a mix of A-Z characters (regardless of case), numeric characters from 0-9, as well as any of the additional three characters: ":", "/", and "-".
 
 - Every '@id' attribute will be tested in the document to ensure that each id only occurs once. This test is already carried out by the XSD version of the schema, but it is not enforced by the RNG version due to how RNG treats the xsd:ID datatype.
 
 - Every reference-related (e.g. '@sourceReference') and target attribute present will be tested to ensure that the attribute is linked elsewhere in the current file.
     - @conventionDeclarationReference: must be linked to an @id found in a conventionDeclaration element.
     - @localTypeDeclarationReference: must be linked to an @id found in a localTypeDeclaration element.
-    - @maintenanceEventReference: must be linked to an @Id found in a maintenanceEvent element.
+    - @maintenanceEventReference: must be linked to an @id found in a maintenanceEvent element.
     - @sourceReference:  must be linked either to an @id found in a source element or a citedRange element.
     - @target: must be linked to an @id found somewhere within the current document.
     
@@ -39,7 +39,7 @@ The TS-EAS Schematron files currently specify the following tests:
 
 - Any use of the @era attribute should be restricted to either 'ce' or 'bce'. 
 
-- Unless the dateEncoding within the control section is set to "otherDateEncoding", then a sub-profile of dates allowable by ISO 8601:2019, parts 1 and 2 (which included EDTF dates), will be enforced. The Schematron file includes the following restrictions on the @notAfter, @notBefore, @standardDate attributes:
+- Unless the dateEncoding within the control section is set to "otherDateEncoding", then a sub-profile of dates allowable by ISO 8601:2019, parts 1 and 2 (which includes EDTF dates), will be enforced. The Schematron file includes the following restrictions on the @notAfter, @notBefore, @standardDate attributes:
     1. Valid dates within all three attributes may be composed of the following:
         - a Year
             - which may optionally start with a "+" or "-". 
