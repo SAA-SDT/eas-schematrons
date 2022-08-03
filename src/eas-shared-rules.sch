@@ -208,15 +208,41 @@
        
     </sch:pattern>
     
-    <sch:pattern id="leap-year-tests">
-        <sch:rule context="*[$check-date-attributes][matches(replace((@notBefore | @notAfter | @standardDate), '[%~?]', ''), '-02-')]">
-            <sch:let name="year-string" value="substring-before((@notBefore | @notAfter | @standardDate), '-') => replace('[+%~?]', '')"/>
+    <!-- combine all three into a function, but for now, let's get this to work -->
+    <sch:pattern id="notAfter-leap-year-tests">
+        <!-- notAfter -->
+        <sch:rule context="*[$check-date-attributes][matches(replace(@notAfter, '[%~?]', ''), '-02-')]">
+            <sch:let name="year-string" value="substring-before(@notAfter, '-') => replace('[+%~?]', '')"/>
             <sch:let name="year" value="if ($year-string castable as xs:gYear) then xs:integer($year-string) else false()"/>
             <sch:let name="leap-year" value="if ($year) then (($year mod 4 = 0 and
                 $year mod 100 != 0) or
                 $year mod 400 = 0) else false()"/>
-            <sch:report test="every $d in (@notBefore | @notAfter | @standardDate) satisfies matches(replace($d, '[%~?]', ''), '-02-30|-02-31')">February dates cannot have a day value of 30 or 31.</sch:report>
-            <sch:report test="$year and not($leap-year) and matches(replace((@notBefore | @notAfter | @standardDate), '[%~?]', ''), '-02-29')">February 29th may only be encoded for leap years. The year encoded in this attribute, <xsl:value-of select="$year-string"/>, however, is not a valid leap year.</sch:report>
+            <sch:report test="matches(replace(@notAfter, '[%~?]', ''), '-02-30|-02-31')">February dates cannot have a day value of 30 or 31. Check the value of "notAfter" attribute.</sch:report>
+            <sch:report test="$year and not($leap-year) and matches(replace(@notAfter, '[%~?]', ''), '-02-29')">February 29th may only be encoded for leap years. The year encoded in the "notAfter" attribute, <xsl:value-of select="$year-string"/>, however, is not a valid leap year.</sch:report>
+        </sch:rule>   
+    </sch:pattern>
+    <sch:pattern id="notBefore-leap-year-tests">
+        <!-- notBefore -->
+        <sch:rule context="*[$check-date-attributes][matches(replace(@notBefore, '[%~?]', ''), '-02-')]">
+            <sch:let name="year-string" value="substring-before(@notBefore, '-') => replace('[+%~?]', '')"/>
+            <sch:let name="year" value="if ($year-string castable as xs:gYear) then xs:integer($year-string) else false()"/>
+            <sch:let name="leap-year" value="if ($year) then (($year mod 4 = 0 and
+                $year mod 100 != 0) or
+                $year mod 400 = 0) else false()"/>
+            <sch:report test="matches(replace(@notBefore, '[%~?]', ''), '-02-30|-02-31')">February dates cannot have a day value of 30 or 31. Check the value of "notBefore" attribute.</sch:report>
+            <sch:report test="$year and not($leap-year) and matches(replace(@notBefore, '[%~?]', ''), '-02-29')">February 29th may only be encoded for leap years. The year encoded in the "notBefore" attribute, <xsl:value-of select="$year-string"/>, however, is not a valid leap year.</sch:report>
+        </sch:rule>
+    </sch:pattern>
+    <sch:pattern id="standardDate-leap-year-tests">
+        <!-- standardDate (but no attempt, currently, to tokenize) -->
+        <sch:rule context="*[$check-date-attributes][matches(replace(@standardDate, '[%~?]', ''), '-02-')]">
+            <sch:let name="year-string" value="substring-before(@standardDate, '-') => replace('[+%~?]', '')"/>
+            <sch:let name="year" value="if ($year-string castable as xs:gYear) then xs:integer($year-string) else false()"/>
+            <sch:let name="leap-year" value="if ($year) then (($year mod 4 = 0 and
+                $year mod 100 != 0) or
+                $year mod 400 = 0) else false()"/>
+            <sch:report test="matches(replace(@standardDate, '[%~?]', ''), '-02-30|-02-31')">February dates cannot have a day value of 30 or 31. Check the value of the "standardDate" attribute.</sch:report>
+            <sch:report test="$year and not($leap-year) and matches(replace(@standardDate, '[%~?]', ''), '-02-29')">February 29th may only be encoded for leap years. The year encoded in the "standardDate" attribute, <xsl:value-of select="$year-string"/>, however, is not a valid leap year.</sch:report>
         </sch:rule>
     </sch:pattern>
 
