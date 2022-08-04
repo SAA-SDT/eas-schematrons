@@ -136,12 +136,17 @@ ts-eas@archivists.org
                 </code>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="prepared-values" as="item()*">
+        <xsl:variable name="sorted-values" as="item()*">
             <!-- EAD3 also included the terminological codes, but since we state 639-2b, we should not, right? -->
             <!-- the previous EAS schematron file was even more "wrong", since it utilized "https://id.loc.gov/vocabulary/iso639-2.rdf" as its source file...
                 but that output only includes, say, "deu" for German, not the bibliographic / anglicised "ger" code.
-            if we go with the EAD3 way, which is more permissive for the codes, then we should change the controlled value from 639-2b to just 639-2. -->            
-            <xsl:sequence select="for $code in $lines//code/bib-code return '(' || $code || ')'"/>
+            if we go with the EAD3 way, which is more permissive for the codes, then we should change the controlled value from 639-2b to just 639-2.
+            for now, let's just add 'em all, so the validation will include both B&T codes.
+            --> 
+            <xsl:sequence select="sort($lines//code/*[normalize-space()])"/>
+        </xsl:variable>
+        <xsl:variable name="prepared-values" as="item()*">
+            <xsl:sequence select="for $code in $sorted-values return '(' || $code || ')'"/>
         </xsl:variable>
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
