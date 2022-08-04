@@ -22,7 +22,7 @@
     
     <xsl:variable name="ietf-bcp-47-file" select="unparsed-text('https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry')"/>
     <xsl:variable name="iso-639-1-file" select="document('https://id.loc.gov/vocabulary/iso639-1.rdf')"/>
-    <xsl:variable name="iso-639-2b-file" select="document('https://id.loc.gov/vocabulary/iso639-2.rdf')"/>
+    <xsl:variable name="iso-639-2b-file" select="unparsed-text('https://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt')"/>
     <xsl:variable name="iso-639-3-file" select="unparsed-text('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab')"/>
     <xsl:variable name="iso-3166-file" select="document('../../src/external-lists/iso-3166.xml')"/>
     <xsl:variable name="iso-15924-file" select="unparsed-text('https://www.unicode.org/iso15924/iso15924.txt')"/>
@@ -124,11 +124,24 @@ ts-eas@archivists.org
     </xsl:function>
     
     <xsl:function name="mdc:create-iso639-2b-regex" as="xs:string">
-        <xsl:variable name="sorted-values" as="item()*">
-            <xsl:sequence select="sort($iso-639-2b-file//*:Authority[not(matches(*:authoritativeLabel[1], '^Reserved', 'i'))]/tokenize(@*:about, '/')[last()])"/>
+        <xsl:variable name="lines">
+            <xsl:for-each select="tokenize($iso-639-2b-file, $newline)[not(contains(., 'local use'))]">
+                <code>
+                    <bib-code>
+                        <xsl:value-of select="tokenize(., '\|')[1]"/> 
+                    </bib-code>
+                    <term-code>
+                        <xsl:value-of select="tokenize(., '\|')[2]"/> 
+                    </term-code>
+                </code>
+            </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="prepared-values" as="item()*">
-            <xsl:sequence select="for $code in $sorted-values return '(' || $code || ')'"/>
+            <!-- EAD3 also included the terminological codes, but since we state 639-2b, we should not, right? -->
+            <!-- the previous EAS schematron file was even more "wrong", since it utilized "https://id.loc.gov/vocabulary/iso639-2.rdf" as its source file...
+                but that output only includes, say, "deu" for German, not the bibliographic / anglicised "ger" code.
+            if we go with the EAD3 way, which is more permissive for the codes, then we should change the controlled value from 639-2b to just 639-2. -->            
+            <xsl:sequence select="for $code in $lines//code/bib-code return '(' || $code || ')'"/>
         </xsl:variable>
         <xsl:value-of select="concat('^(', string-join($prepared-values, '|'), ')$')"/>
     </xsl:function>
