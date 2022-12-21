@@ -130,9 +130,13 @@ ts-eas@archivists.org
                     <bib-code>
                         <xsl:value-of select="tokenize(., '\|')[1]"/> 
                     </bib-code>
+                    <!--
+                        Removing the term codes for now, as discussed in 2022-11 meeting.
+                        If we keep those later, we should change the attribute value to just "iso-639-2b"
                     <term-code>
                         <xsl:value-of select="tokenize(., '\|')[2]"/> 
                     </term-code>
+                    -->
                 </code>
             </xsl:for-each>
         </xsl:variable>
