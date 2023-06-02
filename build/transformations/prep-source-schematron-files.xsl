@@ -4,6 +4,7 @@
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
     xmlns:math="http://www.w3.org/2005/xpath-functions/math"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+    xmlns:err="http://www.w3.org/2005/xqt-errors"
     xmlns:hcmc="http://hcmc.uvic.ca/ns"
     xmlns:mdc="http://mdc"
     exclude-result-prefixes="xs math"
@@ -22,8 +23,36 @@
     
     <xsl:variable name="ietf-bcp-47-file" select="unparsed-text('https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry')"/>
     <xsl:variable name="iso-639-1-file" select="document('https://id.loc.gov/vocabulary/iso639-1.rdf')"/>
-    <xsl:variable name="iso-639-2b-file" select="unparsed-text('https://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt')"/>
-    <xsl:variable name="iso-639-3-file" select="unparsed-text('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab')"/>
+    <xsl:variable name="iso-639-2b-file">
+        <xsl:try>
+            <xsl:value-of select="unparsed-text('https://www.loc.gov/standards/iso639-2/ISO-639-2_utf-8.txt')"/>
+            <xsl:catch>
+                <xsl:message>
+                    ***
+                    Warning: External code list file not available. Reverting to local copy of the file this time around.  Please investigate.
+                    Error code: <xsl:value-of select="$err:code"/>
+                    Reason: <xsl:value-of select="$err:description"/>
+                    ***
+                </xsl:message>
+                <xsl:value-of select="unparsed-text('../../src/external-lists/ISO-639-2_utf-8.txt')"/>
+            </xsl:catch>
+        </xsl:try>    
+    </xsl:variable> 
+    <xsl:variable name="iso-639-3-file">
+        <xsl:try>
+            <xsl:value-of select="unparsed-text('https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab')"/>
+            <xsl:catch>
+                <xsl:message>
+                    ***
+                    Warning: External code list file not available. Reverting to local copy of the file this time around.  Please investigate.
+                    Error code: <xsl:value-of select="$err:code"/>
+                    Reason: <xsl:value-of select="$err:description"/>
+                    ***
+                </xsl:message>
+                <xsl:value-of select="unparsed-text('../../src/external-lists/iso-639-3.tab')"/>
+            </xsl:catch>
+        </xsl:try>    
+    </xsl:variable>
     <xsl:variable name="iso-3166-file" select="document('../../src/external-lists/iso-3166.xml')"/>
     <xsl:variable name="iso-15924-file" select="unparsed-text('https://www.unicode.org/iso15924/iso15924.txt')"/>
     
