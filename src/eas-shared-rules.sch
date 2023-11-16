@@ -156,6 +156,7 @@
              as is ..1899
              as is 1899..2999
              as is 1899/2999
+             as is 1899/
              
              what about?
                 1899..0009    
@@ -205,7 +206,9 @@
         <sch:rule context="*:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
             <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
             <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))>=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
+            <!-- removing this rule, since it is allowed in EDTF.  since the same encoding is possible with other EAS attributes, however, others might still want to restrict this, so leaving the example here as a comment.
             <sch:report test="matches(normalize-space(@standardDate), '^/|/$')">The date expression should not start or end with a "/" character.</sch:report>
+            -->
         </sch:rule>
     </sch:pattern>
     
