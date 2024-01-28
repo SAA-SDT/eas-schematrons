@@ -4,7 +4,7 @@
     xmlns:sqf="http://www.schematron-quickfix.com/validator/process">
     
     <sch:ns uri="https://archivists.org/ns/eac/v2" prefix="eac"/>
-    <sch:ns uri="http://ead3.archivists.org/schema/" prefix="ead"/>
+    <sch:ns uri="https://archivists.org/ns/ead/v4" prefix="ead"/>
     
     <sch:let name="languageEncoding-of-document" value="(*/*:control/@languageEncoding)"/>
       
