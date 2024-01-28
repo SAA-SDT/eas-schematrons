@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-01-28T16:59:13.904-05:00
+2024-01-28T16:59:16.54-05:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -13,105 +13,105 @@ ts-eas@archivists.org
             xmlns:sqf="http://www.schematron-quickfix.com/validator/process"
             xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
             queryBinding="xslt2">
-   <sch:ns uri="https://archivists.org/ns/eac/v2" prefix="eac"/>
+   <sch:ns uri="https://archivists.org/ns/ead/v4" prefix="ead"/>
    <sch:let name="languageEncoding-of-document"
-            value="(*/eac:control/@languageEncoding)"/>
+            value="(*/ead:control/@languageEncoding)"/>
    <sch:let name="check-language-codes"
             value="if ($languageEncoding-of-document = ('iso639-1', 'iso639-2b', 'iso639-3')) then true() else false()"/>
    <sch:let name="check-ietf-codes"
             value="if ($languageEncoding-of-document eq 'ietf-bcp-47') then true() else false()"/>
    <sch:let name="check-country-codes"
-            value="if (*/eac:control/@countryEncoding eq 'otherCountryEncoding') then false() else true()"/>
+            value="if (*/ead:control/@countryEncoding eq 'otherCountryEncoding') then false() else true()"/>
    <sch:let name="check-script-codes"
-            value="if (*/eac:control/@scriptEncoding eq 'otherScriptEncoding') then false() else true()"/>
+            value="if (*/ead:control/@scriptEncoding eq 'otherScriptEncoding') then false() else true()"/>
    <sch:let name="check-repository-codes"
-            value="if (*/eac:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
+            value="if (*/ead:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
    <sch:let name="check-date-attributes"
-            value="if (*/eac:control/@dateEncoding eq 'otherDateEncoding') then false() else true()"/>
+            value="if (*/ead:control/@dateEncoding eq 'otherDateEncoding') then false() else true()"/>
    <sch:pattern>
-      <sch:rule context="eac:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-1']">
+      <sch:rule context="ead:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-1']">
          <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-1-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
       </sch:rule>
-      <sch:rule context="eac:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-2b']">
+      <sch:rule context="ead:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-2b']">
          <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-2b-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
       </sch:rule>
-      <sch:rule context="eac:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-3']">
+      <sch:rule context="ead:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'iso639-3']">
          <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $iso639-3-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the <xsl:value-of select="$languageEncoding-of-document"/> code list.</sch:assert>
       </sch:rule>
-      <sch:rule context="eac:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'ietf-bcp-47']">
+      <sch:rule context="ead:*[@languageCode | @languageOfElement][$languageEncoding-of-document eq 'ietf-bcp-47']">
          <sch:assert test="every $l in (@languageCode | @languageOfElement) satisfies matches($l, $ietf-regex)">The <sch:name/> element's languageOfElement or languageCode attribute should contain a value from the 'ietf-bcp-47' code list.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@countryCode][$check-country-codes]">
+      <sch:rule context="ead:*[@countryCode][$check-country-codes]">
          <sch:assert test="matches(@countryCode, $iso3166-regex)">The countryCode attribute should contain a code from the ISO 3166-1 code list.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@scriptCode | @scriptOfElement][$check-script-codes]">
+      <sch:rule context="ead:*[@scriptCode | @scriptOfElement][$check-script-codes]">
          <sch:assert test="every $s in (@scriptCode | @scriptOfElement) satisfies matches($s, $iso15924-regex)">The scriptOfElement or scriptCode attribute should contain a code from the ISO 15924 code list.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:agencyCode[$check-repository-codes]">
+      <sch:rule context="ead:agencyCode[$check-repository-codes]">
          <sch:assert test="matches(normalize-space(.), $iso15511-regex)">If the repositoryEncoding is set to ISO 15511, then the format of the value of the <sch:emph>agencyCode</sch:emph> element is constrained to that of the International Standard Identifier for Libraries and Related Organizations (ISIL: ISO 15511): a prefix, a hyphen, and an identifier.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@id]">
-         <sch:assert test="count(//eac:*/@id[. = current()/@id]) = 1">This element does not have a unique value for its 'id' attribute.</sch:assert>
+      <sch:rule context="ead:*[@id]">
+         <sch:assert test="count(//ead:*/@id[. = current()/@id]) = 1">This element does not have a unique value for its 'id' attribute.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@conventionDeclarationReference]">
-         <sch:assert test="every $ref in tokenize(@conventionDeclarationReference, ' ') satisfies $ref = (/*/eac:control[1]/eac:conventionDeclaration/@id)">
+      <sch:rule context="ead:*[@conventionDeclarationReference]">
+         <sch:assert test="every $ref in tokenize(@conventionDeclarationReference, ' ') satisfies $ref = (/*/ead:control[1]/ead:conventionDeclaration/@id)">
                 When you use the conventionDeclarationReference attribute, it must be linked to a conventionDeclaration element.
             </sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@localTypeDeclarationReference]">
-         <sch:assert test="every $ref in tokenize(@localTypeDeclarationReference, ' ') satisfies $ref = (/*/eac:control[1]/eac:localTypeDeclaration/@id)">
+      <sch:rule context="ead:*[@localTypeDeclarationReference]">
+         <sch:assert test="every $ref in tokenize(@localTypeDeclarationReference, ' ') satisfies $ref = (/*/ead:control[1]/ead:localTypeDeclaration/@id)">
                 When you use the localTypeDeclarationReference attribute, it must be linked to a localTypeDeclaration element.
             </sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@maintenanceEventReference]">
-         <sch:assert test="every $ref in tokenize(@maintenanceEventReference, ' ') satisfies $ref = (/*/eac:control[1]/eac:maintenanceHistory[1]/eac:maintenanceEvent/@id)">
+      <sch:rule context="ead:*[@maintenanceEventReference]">
+         <sch:assert test="every $ref in tokenize(@maintenanceEventReference, ' ') satisfies $ref = (/*/ead:control[1]/ead:maintenanceHistory[1]/ead:maintenanceEvent/@id)">
                 When you use the maintenanceEventReference attribute, it must be linked to a maintenanceEvent element.
             </sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@sourceReference]">
-         <sch:assert test="every $ref in tokenize(@sourceReference, ' ') satisfies $ref = (/*/eac:control[1]/eac:sources[1]/eac:source/@id, /*/eac:control[1]/eac:sources[1]/eac:source/eac:citedRange/@id)">
+      <sch:rule context="ead:*[@sourceReference]">
+         <sch:assert test="every $ref in tokenize(@sourceReference, ' ') satisfies $ref = (/*/ead:control[1]/ead:sources[1]/ead:source/@id, /*/ead:control[1]/ead:sources[1]/ead:source/ead:citedRange/@id)">
                 When you use the sourceReference attribute, it must be linked to a source or citedRange element.
             </sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:*[@target]">
-         <sch:assert test="every $target in tokenize(@target, ' ') satisfies $target = (//eac:*/@id)">
+      <sch:rule context="ead:*[@target]">
+         <sch:assert test="every $target in tokenize(@target, ' ') satisfies $target = (//ead:*/@id)">
                 When you use the target attribute, it must be linked to another element by means of the id attribute.
             </sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="maintenanceAgency-constraints">
-      <sch:rule context="eac:maintenanceAgency[eac:agencyCode[not(normalize-space())]] | eac:maintenanceAgency[not(eac:agencyCode)]">
-         <sch:assert test="eac:agencyName[normalize-space()]">The maintenanceAgency element requires either an agencyCode or agencyName element that cannot be empty.</sch:assert>
+      <sch:rule context="ead:maintenanceAgency[ead:agencyCode[not(normalize-space())]] | ead:maintenanceAgency[not(ead:agencyCode)]">
+         <sch:assert test="ead:agencyName[normalize-space()]">The maintenanceAgency element requires either an agencyCode or agencyName element that cannot be empty.</sch:assert>
       </sch:rule>
-      <sch:rule context="eac:maintenanceAgency[eac:agencyName[not(normalize-space())]] | eac:maintenanceAgency[not(eac:agencyName)]">
-         <sch:assert test="eac:agencyCode[normalize-space()]">The maintenanceAgency element requires either an agencyCode or agencyName element that cannot be empty.</sch:assert>
+      <sch:rule context="ead:maintenanceAgency[ead:agencyName[not(normalize-space())]] | ead:maintenanceAgency[not(ead:agencyName)]">
+         <sch:assert test="ead:agencyCode[normalize-space()]">The maintenanceAgency element requires either an agencyCode or agencyName element that cannot be empty.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="eventDateTime">
-      <sch:rule context="/*/eac:control/eac:maintenanceHistory/eac:maintenanceEvent/eac:eventDateTime[not(@standardDateTime)]">
+      <sch:rule context="/*/ead:control/ead:maintenanceHistory/ead:maintenanceEvent/ead:eventDateTime[not(@standardDateTime)]">
          <sch:assert test="normalize-space()">The eventDateTime element requires either a standardDateTime attribute or text.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="eac:date[@era] | eac:toDate[@era] | eac:fromDate[@era]">
+      <sch:rule context="ead:date[@era] | ead:toDate[@era] | ead:fromDate[@era]">
          <sch:assert test="@era = ('ce', 'bce')">Suggested values for the era attribute are 'ce' or 'bce'</sch:assert>
       </sch:rule>
    </sch:pattern>
@@ -129,18 +129,18 @@ ts-eas@archivists.org
                value="'[T| ](0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(?:Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$'"/>
       <sch:let name="iso8601-regex"
                value="concat('^', $qualifier, $Y, $qualifier, '$','|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
-      <sch:rule context="eac:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | eac:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | eac:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
+      <sch:rule context="ead:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | ead:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | ead:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
          <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate[not(matches(., '\.\.|/'))]) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="date-range-tests">
-      <sch:rule context="eac:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
+      <sch:rule context="ead:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
          <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
          <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))&gt;=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="notAfter-leap-year-tests">
-      <sch:rule context="eac:*[$check-date-attributes][matches(replace(@notAfter, '[%~?]', ''), '-02-')]">
+      <sch:rule context="ead:*[$check-date-attributes][matches(replace(@notAfter, '[%~?]', ''), '-02-')]">
          <sch:let name="year-string"
                   value="substring-before(@notAfter, '-') =&gt; replace('[+%~?]', '')"/>
          <sch:let name="year"
@@ -152,7 +152,7 @@ ts-eas@archivists.org
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="notBefore-leap-year-tests">
-      <sch:rule context="eac:*[$check-date-attributes][matches(replace(@notBefore, '[%~?]', ''), '-02-')]">
+      <sch:rule context="ead:*[$check-date-attributes][matches(replace(@notBefore, '[%~?]', ''), '-02-')]">
          <sch:let name="year-string"
                   value="substring-before(@notBefore, '-') =&gt; replace('[+%~?]', '')"/>
          <sch:let name="year"
@@ -164,7 +164,7 @@ ts-eas@archivists.org
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="standardDate-leap-year-tests">
-      <sch:rule context="eac:*[$check-date-attributes][matches(replace(@standardDate, '[%~?]', ''), '-02-')]">
+      <sch:rule context="ead:*[$check-date-attributes][matches(replace(@standardDate, '[%~?]', ''), '-02-')]">
          <sch:let name="year-string"
                   value="substring-before(@standardDate, '-') =&gt; replace('[+%~?]', '')"/>
          <sch:let name="year"
@@ -176,7 +176,7 @@ ts-eas@archivists.org
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="simple-date-range-comparisons">
-      <sch:rule context="eac:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
+      <sch:rule context="ead:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
          <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
          <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
          <sch:let name="testable_dates"
@@ -185,7 +185,7 @@ ts-eas@archivists.org
                 The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
          </sch:assert>
       </sch:rule>
-      <sch:rule context="eac:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
+      <sch:rule context="ead:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
          <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
          <sch:let name="end_date" value="substring-after(@standardDate, '..')"/>
          <sch:let name="testable_dates"
