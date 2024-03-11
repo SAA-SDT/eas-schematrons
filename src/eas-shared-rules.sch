@@ -16,6 +16,70 @@
     <sch:let name="check-repository-codes" value="if (*/*:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
     <sch:let name="check-date-attributes" value="if (*/*:control/@dateEncoding eq 'otherDateEncoding') then false() else true()"/>
     
+    <!-- EAS Lists.  Refactor to adopt a declarative approach (and separate, as necessary.. this is just EAD4??) -->
+    <sch:let name="check-audience" value="if (*/*:control/@audienceEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-contactLineType" value="if (*/*:control/@contactLineTypeEncodingEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-coverage" value="if (*/*:control/@coverageEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-detailLevel" value="if (*/*:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-descriptionOfComponentsType" value="if (*/*:control/@descriptionOfComponentsTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-level" value="if (*/*:control/@levelEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-maintenanceEventType" value="if (*/*:control/@maintenanceEventTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-maintenanceStatus" value="if (*/*:control/@maintenanceStatusEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-physDescStructuredType" value="if (*/*:control/@physDescStructuredTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-publicationStatus" value="if (*/*:control/@publicationStatusEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-status" value="if (*/*:control/@statusEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-unitDateType" value="if (*/*:control/@unitDateTypeEncoding eq 'EASList') then true() else false()"/>
+    
+    
+    <sch:let name="audience" xml:id="audience"/>
+    <sch:let name="contactLineType" xml:id="contactLineType"/>
+    <sch:let name="coverage" xml:id="coverage"/>
+    <sch:let name="detailLevel" xml:id="detailLevel"/>
+    <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType"/>
+    <sch:let name="level" xml:id="level"/>
+    <sch:let name="maintenanceEventType" xml:id="maintenanceEventType"/>
+    <sch:let name="physDescStructuredType" xml:id="physDescStructuredType"/>
+    <sch:let name="publicationStatus" xml:id="publicationStatus"/>
+    <sch:let name="status" xml:id="status"/>
+    <sch:let name="unitDateType" xml:id="unitDateType"/>
+
+    <!-- EAS Lists.  Still need to determine the build process, and separate EAD/C/F lists -->
+    <sch:pattern>
+        <sch:rule context="*[@audience][$check-audience]">
+            <sch:assert test="@audience = $audience/option"/>
+        </sch:rule>
+        <sch:rule context="*[@contactLineType][$check-contactLineType]">
+            <sch:assert test="@contactLineType = $contactLineType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@coverage][$check-coverage]">
+            <sch:assert test="@coverage = $coverage/option"/>
+        </sch:rule>
+        <sch:rule context="*[@detailLevel][$check-detailLevel]">
+            <sch:assert test="@detailLevel = $detailLevel/option"/>
+        </sch:rule>
+        <sch:rule context="*[@descriptionOfComponentsType][$check-descriptionOfComponentsType]">
+            <sch:assert test="@descriptionOfComponentsType = $descriptionOfComponentsType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@level][$check-level]">
+            <sch:assert test="@level = $level/option"/>
+        </sch:rule>
+        <sch:rule context="*[@maintenanceEventType][$check-maintenanceEventType]">
+            <sch:assert test="@maintenanceEventType = $maintenanceEventType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@physDescStructuredType][$check-physDescStructuredType]">
+            <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@publicationStatus][$check-publicationStatus]">
+            <sch:assert test="@publicationStatus = $publicationStatus/option"/>
+        </sch:rule>
+        <sch:rule context="*[@status][$check-status]">
+            <sch:assert test="@status = $status/option"/>
+        </sch:rule>
+        <sch:rule context="*[@unitDateType][$check-unitDateType]">
+            <sch:assert test="@unitDateType = $unitDateType/option"/>
+        </sch:rule>
+    </sch:pattern>
+    
     <!-- LANGUAGE CODE TESTS (in process) -->
     <sch:pattern>
         
