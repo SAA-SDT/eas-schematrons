@@ -56,6 +56,8 @@
     <xsl:variable name="iso-3166-file" select="document('../../src/external-lists/iso-3166.xml')"/>
     <xsl:variable name="iso-15924-file" select="unparsed-text('https://www.unicode.org/iso15924/iso15924.txt')"/>
     
+    <xsl:variable name="EASLists" select="document('../../src/internal-lists/eas-lists.xml')"/>
+    
     <xd:doc>
         <xd:desc>
             <xd:p>For now, the initial template is called by our external build scripts.</xd:p>
@@ -113,6 +115,20 @@ ts-eas@archivists.org
         </xd:desc>
     </xd:doc>
     <xsl:template match="sch:ns[not(@prefix = $schema)]"/>
+
+    <!-- again, change this!!! -->
+    <xsl:template match="sch:let[@xml:id = ('audience', 'contactLineType', 'coverage', 'detailLevel', 'descriptionOfComponentsType', 'level', 'maintenanceEventType', 'physDescStructuredType', 'publicationStatus', 'status', 'unitDateType')]">
+        <xsl:variable name="list" select="@xml:id"/>
+        <xsl:message select="$list"/>
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:for-each select="$EASLists//list[@id = $list]/concept/label">
+                <xsl:element name="option" namespace="">
+                    <xsl:value-of select="."/>
+                </xsl:element>
+            </xsl:for-each>
+        </xsl:copy>
+    </xsl:template>
     
     <!-- works, for now, but change this approach later.-->
     <xsl:template match="sch:let[@xml:id = ('iso15511', 'iso639-1', 'iso639-2b', 'iso639-3', 'iso3166', 'iso15924')]">

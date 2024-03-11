@@ -15,7 +15,7 @@ if %errorlevel%==1 (
 
 @echo Getting started.
 
-java %parameters% %CP% net.sf.saxon.Transform -t -xsl:transformations\prep-source-schematron-files.xsl -it schema='eac'
+rem java %parameters% %CP% net.sf.saxon.Transform -t -xsl:transformations\prep-source-schematron-files.xsl -it schema='eac'
 java %parameters% %CP% net.sf.saxon.Transform -t -xsl:transformations\prep-source-schematron-files.xsl -it schema='ead'
 
 

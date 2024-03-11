@@ -9,7 +9,7 @@ saxon="../vendor/SaxonHE10-1J/saxon-he-10.1.jar"
 
 echo "Getting started."
 
-java -cp $saxon net.sf.saxon.Transform -t -xsl:transformations/prep-source-schematron-files.xsl -it schema='eac'
+#java -cp $saxon net.sf.saxon.Transform -t -xsl:transformations/prep-source-schematron-files.xsl -it schema='eac'
 java -cp $saxon net.sf.saxon.Transform -t -xsl:transformations/prep-source-schematron-files.xsl -it schema='ead'
 
 echo "All done."
