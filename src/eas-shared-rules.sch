@@ -191,8 +191,9 @@
     </sch:pattern>
     
     <!-- DATES -->
+    <!-- adding the EAD4 unitDate selections first; ideally unitDate and unitDateStructured will merge, for simplicity's sake -->
     <sch:pattern>
-        <sch:rule context="*:date[@era] | *:toDate[@era] | *:fromDate[@era]">
+        <sch:rule context="*:unitDate[@era] | *:date[@era] | *:toDate[@era] | *:fromDate[@era]">
             <sch:assert test="@era = ('ce', 'bce')">Suggested values for the era attribute are 'ce' or 'bce'</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -242,6 +243,12 @@
     <!-- should switch to a grammar based approach for dates, eventually...
          definitely.
         -->
+    
+    <!-- 
+    adding the EAD4 unitDate selections first; ideally unitDate and unitDateStructured will merge, for simplicity's sake
+    -->
+    <!-- *** ALERT *** -->
+    <!-- if kept, we will need to annotate and separate the unitDate rules from the EAC-CPF schematron -->
             
     <sch:pattern id="dates">
         <sch:let name="qualifier" value="'[~%?]?'"/>   
@@ -260,14 +267,14 @@
         
         <sch:let name="iso8601-regex" value="concat('^', $qualifier, $Y, $qualifier, '$','|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
         
-        <sch:rule context="*:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | *:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
+        <sch:rule context="*:unitDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | *:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | *:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | *:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
             <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate[not(matches(., '\.\.|/'))]) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
         </sch:rule>
       
     </sch:pattern>
     
     <sch:pattern id="date-range-tests">
-        <sch:rule context="*:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
+        <sch:rule context="*:unitDate[$check-date-attributes][@standardDate[matches(., '\.\.|/')]] | *:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
             <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
             <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))>=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
             <!-- removing this rule, since it is allowed in EDTF.  since the same encoding is possible with other EAS attributes, however, others might still want to restrict this, so leaving the example here as a comment.
@@ -317,7 +324,7 @@
 
 
     <sch:pattern id="simple-date-range-comparisons">
-        <sch:rule context="*:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
+        <sch:rule context="*:unitDate[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')] | *:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
             <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
             <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or $d castable as xs:gYear or $d castable as xs:gYearMonth)"/>  
@@ -325,7 +332,7 @@
                 The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
             </sch:assert>
         </sch:rule>
-        <sch:rule context="*:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
+        <sch:rule context="*:unitDate[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')] | *:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
             <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
             <sch:let name="end_date" value="substring-after(@standardDate, '..')"/>         
             <sch:let name="testable_dates" value="every $d in ($begin_date, $end_date) satisfies ($d castable as xs:date or $d castable as xs:dateTime or$d castable as xs:gYear or $d castable as xs:gYearMonth)"/>
