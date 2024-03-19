@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-18T19:55:41.05-04:00
+2024-03-18T20:29:36.354-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -29,7 +29,7 @@ ts-eas@archivists.org
    <sch:let name="check-date-attributes"
             value="if (*/ead:control/@dateEncoding eq 'iso8601') then true() else false()"/>
    <sch:let name="check-dateEncoding-attribute"
-            value="if (//@standardDate[1] or //@fromDate[1] or //@toDate[1]) then true() else false()"/>
+            value="if (//@standardDate[1] or //@notAfter[1] or *//@notAfter[1]) then true() else false()"/>
    <sch:let name="check-audience"
             value="if (*/ead:control/@audienceEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-contactLineType"
@@ -122,8 +122,8 @@ ts-eas@archivists.org
       <option>inclusive</option>
    </sch:let>
    <sch:pattern>
-      <sch:rule context="*/ead:control[$check-dateEncoding-attribute]">
-         <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, you must set @dateEncoding on the control element.</sch:assert>
+      <sch:rule context="ead:control[$check-dateEncoding-attribute]">
+         <sch:assert test="exists(@dateEncoding) and @dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, you must set @dateEncoding on the control element.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
