@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EASLists>
+    <list id="addressLineType">
+        <concept>
+            <label>county</label>
+        </concept>
+        <concept>
+            <label>country</label>
+        </concept>
+        <concept>
+            <label>district</label>
+        </concept>
+        <concept>
+            <label>municipality</label>
+        </concept>
+        <concept>
+            <label>postBox</label>
+        </concept>
+        <concept>
+            <label>postalCode</label>
+        </concept>
+        <concept>
+            <label>region</label>
+        </concept>
+        <concept>
+            <label>street</label>
+        </concept>
+    </list>
     <!-- should likely have one file per conceptScheme, but for now, and to keep this list like, we have... -->
     <list id="audience">
         <concept>

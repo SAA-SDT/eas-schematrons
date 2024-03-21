@@ -19,8 +19,9 @@
     <sch:let name="check-dateEncoding-attribute" value="if (//@standardDate[1] or //@notAfter[1] or *//@notAfter[1]) then true() else false()"/>
     
     <!-- EAS Lists.  Refactor to adopt a declarative approach (and separate, as necessary.. this is just EAD4??) -->
+    <sch:let name="check-address" value="if (*/*:control/@addressLineTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-audience" value="if (*/*:control/@audienceEncoding eq 'EASList') then true() else false()"/>
-    <sch:let name="check-contactLineType" value="if (*/*:control/@contactLineTypeEncodingEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-contactLineType" value="if (*/*:control/@contactLineTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-coverage" value="if (*/*:control/@coverageEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-detailLevel" value="if (*/*:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-descriptionOfComponentsType" value="if (*/*:control/@descriptionOfComponentsTypeEncoding eq 'EASList') then true() else false()"/>
@@ -33,6 +34,7 @@
     <sch:let name="check-unitDateType" value="if (*/*:control/@unitDateTypeEncoding eq 'EASList') then true() else false()"/>
     
     
+    <sch:let name="addressLineType" xml:id="addressLineType"/>
     <sch:let name="audience" xml:id="audience"/>
     <sch:let name="contactLineType" xml:id="contactLineType"/>
     <sch:let name="coverage" xml:id="coverage"/>
@@ -40,6 +42,7 @@
     <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType"/>
     <sch:let name="level" xml:id="level"/>
     <sch:let name="maintenanceEventType" xml:id="maintenanceEventType"/>
+    <sch:let name="maintenanceStatus" xml:id="maintenanceStatus"/>
     <sch:let name="physDescStructuredType" xml:id="physDescStructuredType"/>
     <sch:let name="publicationStatus" xml:id="publicationStatus"/>
     <sch:let name="status" xml:id="status"/>
@@ -54,6 +57,9 @@
 
     <!-- EAS Lists.  Still need to determine the build process, and separate EAD/C/F lists -->
     <sch:pattern>
+        <sch:rule context="*[@addressLineType][$check-address]">
+            <sch:assert test="@addressLineType = $addressLineType/option"/>
+        </sch:rule>
         <sch:rule context="*[@audience][$check-audience]">
             <sch:assert test="@audience = $audience/option"/>
         </sch:rule>
@@ -74,6 +80,9 @@
         </sch:rule>
         <sch:rule context="*[@maintenanceEventType][$check-maintenanceEventType]">
             <sch:assert test="@maintenanceEventType = $maintenanceEventType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@maintenanceStatus][$check-maintenanceStatus]">
+            <sch:assert test="@maintenanceStatus = $maintenanceStatus/option"/>
         </sch:rule>
         <sch:rule context="*[@physDescStructuredType][$check-physDescStructuredType]">
             <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>
