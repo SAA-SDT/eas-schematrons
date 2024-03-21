@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-21T18:54:01.03-04:00
+2024-03-21T18:59:30.998-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -102,6 +102,7 @@ ts-eas@archivists.org
       <option>unknown</option>
       <option>updated</option>
    </sch:let>
+   <sch:let name="maintenanceStatus" xml:id="maintenanceStatus"/>
    <sch:let name="physDescStructuredType" xml:id="physDescStructuredType">
       <option>carrier</option>
       <option>materialType</option>
@@ -146,6 +147,9 @@ ts-eas@archivists.org
       </sch:rule>
       <sch:rule context="ead:*[@maintenanceEventType][$check-maintenanceEventType]">
          <sch:assert test="@maintenanceEventType = $maintenanceEventType/option"/>
+      </sch:rule>
+      <sch:rule context="ead:*[@maintenanceStatus][$check-maintenanceStatus]">
+         <sch:assert test="@maintenanceStatus = $maintenanceStatus/option"/>
       </sch:rule>
       <sch:rule context="ead:*[@physDescStructuredType][$check-physDescStructuredType]">
          <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>

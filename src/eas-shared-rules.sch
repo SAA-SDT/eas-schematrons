@@ -40,6 +40,7 @@
     <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType"/>
     <sch:let name="level" xml:id="level"/>
     <sch:let name="maintenanceEventType" xml:id="maintenanceEventType"/>
+    <sch:let name="maintenanceStatus" xml:id="maintenanceStatus"/>
     <sch:let name="physDescStructuredType" xml:id="physDescStructuredType"/>
     <sch:let name="publicationStatus" xml:id="publicationStatus"/>
     <sch:let name="status" xml:id="status"/>
@@ -70,6 +71,9 @@
         </sch:rule>
         <sch:rule context="*[@maintenanceEventType][$check-maintenanceEventType]">
             <sch:assert test="@maintenanceEventType = $maintenanceEventType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@maintenanceStatus][$check-maintenanceStatus]">
+            <sch:assert test="@maintenanceStatus = $maintenanceStatus/option"/>
         </sch:rule>
         <sch:rule context="*[@physDescStructuredType][$check-physDescStructuredType]">
             <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>
