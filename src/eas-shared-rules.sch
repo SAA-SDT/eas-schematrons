@@ -50,8 +50,8 @@
     
     <!-- ensure dateEncoding control attribute is set if any of the 3 date attributes are set -->
     <sch:pattern>
-        <sch:rule context="*:control[$check-dateEncoding-attribute]">
-            <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, you must set @dateEncoding on the control element.</sch:assert>
+        <sch:rule context="*:control[@dateEncoding][$check-dateEncoding-attribute]">
+            <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding".</sch:assert>
         </sch:rule>
     </sch:pattern>
 
