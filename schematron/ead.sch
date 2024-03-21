@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-21T19:21:16.641-04:00
+2024-03-21T19:43:47.146-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -56,7 +56,16 @@ ts-eas@archivists.org
             value="if (*/ead:control/@statusEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-unitDateType"
             value="if (*/ead:control/@unitDateTypeEncoding eq 'EASList') then true() else false()"/>
-   <sch:let name="addressLineType" xml:id="addressLineType"/>
+   <sch:let name="addressLineType" xml:id="addressLineType">
+      <option>county</option>
+      <option>country</option>
+      <option>district</option>
+      <option>municipality</option>
+      <option>postBox</option>
+      <option>postalCode</option>
+      <option>region</option>
+      <option>street</option>
+   </sch:let>
    <sch:let name="audience" xml:id="audience">
       <option>internal</option>
       <option>external</option>
@@ -104,7 +113,16 @@ ts-eas@archivists.org
       <option>unknown</option>
       <option>updated</option>
    </sch:let>
-   <sch:let name="maintenanceStatus" xml:id="maintenanceStatus"/>
+   <sch:let name="maintenanceStatus" xml:id="maintenanceStatus">
+      <option>cancelled</option>
+      <option>deleted</option>
+      <option>deletedMerged</option>
+      <option>deletedReplaced</option>
+      <option>deletedSplit</option>
+      <option>derived</option>
+      <option>new</option>
+      <option>revised</option>
+   </sch:let>
    <sch:let name="physDescStructuredType" xml:id="physDescStructuredType">
       <option>carrier</option>
       <option>materialType</option>
@@ -126,8 +144,8 @@ ts-eas@archivists.org
       <option>inclusive</option>
    </sch:let>
    <sch:pattern>
-      <sch:rule context="ead:control[$check-dateEncoding-attribute]">
-         <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, you must set @dateEncoding on the control element.</sch:assert>
+      <sch:rule context="ead:control[@dateEncoding][$check-dateEncoding-attribute]">
+         <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding".</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
