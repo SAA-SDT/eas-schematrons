@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-21T18:59:30.998-04:00
+2024-03-21T19:10:26.45-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -27,7 +27,9 @@ ts-eas@archivists.org
    <sch:let name="check-repository-codes"
             value="if (*/ead:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
    <sch:let name="check-date-attributes"
-            value="if (*/ead:control/@dateEncoding eq 'otherDateEncoding') then false() else true()"/>
+            value="if (*/ead:control/@dateEncoding eq 'iso8601') then true() else false()"/>
+   <sch:let name="check-dateEncoding-attribute"
+            value="if (//@standardDate[1] or //@notAfter[1] or *//@notAfter[1]) then true() else false()"/>
    <sch:let name="check-address"
             value="if (*/ead:control/@addressLineTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-audience"
@@ -123,6 +125,11 @@ ts-eas@archivists.org
       <option>bulk</option>
       <option>inclusive</option>
    </sch:let>
+   <sch:pattern>
+      <sch:rule context="ead:control[$check-dateEncoding-attribute]">
+         <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, you must set @dateEncoding on the control element.</sch:assert>
+      </sch:rule>
+   </sch:pattern>
    <sch:pattern>
       <sch:rule context="ead:*[@addressLineType][$check-address]">
          <sch:assert test="@addressLineType = $addressLineType/option"/>
@@ -247,7 +254,7 @@ ts-eas@archivists.org
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
-      <sch:rule context="ead:date[@era] | ead:toDate[@era] | ead:fromDate[@era]">
+      <sch:rule context="ead:unitDate[@era] | ead:date[@era] | ead:toDate[@era] | ead:fromDate[@era]">
          <sch:assert test="@era = ('ce', 'bce')">Suggested values for the era attribute are 'ce' or 'bce'</sch:assert>
       </sch:rule>
    </sch:pattern>
@@ -265,12 +272,12 @@ ts-eas@archivists.org
                value="'[T| ](0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(?:Z|[+-](?:2[0-3]|[01][0-9]):[0-5][0-9])$'"/>
       <sch:let name="iso8601-regex"
                value="concat('^', $qualifier, $Y, $qualifier, '$','|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M_S, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, '$', '|', '^', $qualifier, $Y, $qualifier, '-', $qualifier, $M, $qualifier, '-', $qualifier, $D, $qualifier, $T, '$')"/>
-      <sch:rule context="ead:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | ead:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | ead:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
+      <sch:rule context="ead:unitDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | ead:date[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate[not(matches(., '\.\.|/'))])] | ead:toDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)] | ead:fromDate[$check-date-attributes][exists(@notBefore | @notAfter | @standardDate)]">
          <sch:assert test="every $d in (@notBefore, @notAfter, @standardDate[not(matches(., '\.\.|/'))]) satisfies matches($d, $iso8601-regex)">The <sch:emph>notBefore</sch:emph>, <sch:emph>notAfter</sch:emph>, and <sch:emph>standardDate</sch:emph> attributes of <sch:name/> must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="date-range-tests">
-      <sch:rule context="ead:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
+      <sch:rule context="ead:unitDate[$check-date-attributes][@standardDate[matches(., '\.\.|/')]] | ead:date[$check-date-attributes][@standardDate[matches(., '\.\.|/')]]">
          <sch:assert test="every $d in (tokenize(@standardDate, '(\.\.)|(/)')[normalize-space()]) satisfies matches($d, $iso8601-regex)">All <sch:emph>standardDate</sch:emph> attributes in a valid date range must match the TS-EAS subprofile of valid ISO 8601 dates.</sch:assert>
          <sch:report test="count(tokenize(@standardDate, '(\.\.)|(/)'))&gt;=3">This date expression has too many range operators. Only a single "/" or ".." is permitted.</sch:report>
       </sch:rule>
@@ -312,7 +319,7 @@ ts-eas@archivists.org
       </sch:rule>
    </sch:pattern>
    <sch:pattern id="simple-date-range-comparisons">
-      <sch:rule context="ead:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
+      <sch:rule context="ead:unitDate[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')] | ead:date[$check-date-attributes][matches(@standardDate, '[0-9]/[0-9]')]">
          <sch:let name="begin_date" value="substring-before(@standardDate, '/')"/>
          <sch:let name="end_date" value="substring-after(@standardDate, '/')"/>
          <sch:let name="testable_dates"
@@ -321,7 +328,7 @@ ts-eas@archivists.org
                 The standardDate attribute value for this field needs to be updated. The first date, <xsl:value-of select="$begin_date"/>, is encoded as occurring <sch:emph>before</sch:emph> the end date, <xsl:value-of select="$end_date"/>
          </sch:assert>
       </sch:rule>
-      <sch:rule context="ead:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
+      <sch:rule context="ead:unitDate[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')] | ead:date[$check-date-attributes][matches(@standardDate, '[0-9]\.\.[0-9]')]">
          <sch:let name="begin_date" value="substring-before(@standardDate, '..')"/>
          <sch:let name="end_date" value="substring-after(@standardDate, '..')"/>
          <sch:let name="testable_dates"
