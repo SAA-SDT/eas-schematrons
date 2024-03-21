@@ -13,7 +13,7 @@
     <sch:let name="check-ietf-codes" value="if ($languageEncoding-of-document eq 'ietf-bcp-47') then true() else false()"/>
     <sch:let name="check-country-codes" value="if (*/*:control/@countryEncoding eq 'otherCountryEncoding') then false() else true()"/>
     <sch:let name="check-script-codes" value="if (*/*:control/@scriptEncoding eq 'otherScriptEncoding') then false() else true()"/>
-    <sch:let name="check-repository-codes" value="if (*/*:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
+    <sch:let name="check-repository-codes" value="if (*/*:control/@repositoryEncoding eq 'iso15511') then true() else false()"/>
     <sch:let name="check-date-attributes" value="if (*/*:control/@dateEncoding eq 'iso8601') then true() else false()"/>
     
     <sch:let name="check-dateEncoding-attribute" value="if (//@standardDate[1] or //@notAfter[1] or *//@notAfter[1]) then true() else false()"/>

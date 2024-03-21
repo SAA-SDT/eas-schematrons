@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-21T19:10:26.45-04:00
+2024-03-21T19:21:16.641-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -25,7 +25,7 @@ ts-eas@archivists.org
    <sch:let name="check-script-codes"
             value="if (*/ead:control/@scriptEncoding eq 'otherScriptEncoding') then false() else true()"/>
    <sch:let name="check-repository-codes"
-            value="if (*/ead:control/@repositoryEncoding eq 'otherRepositoryEncoding') then false() else true()"/>
+            value="if (*/ead:control/@repositoryEncoding eq 'iso15511') then true() else false()"/>
    <sch:let name="check-date-attributes"
             value="if (*/ead:control/@dateEncoding eq 'iso8601') then true() else false()"/>
    <sch:let name="check-dateEncoding-attribute"
