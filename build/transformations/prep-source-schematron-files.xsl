@@ -117,7 +117,7 @@ ts-eas@archivists.org
     <xsl:template match="sch:ns[not(@prefix = $schema)]"/>
 
     <!-- again, change this!!! -->
-    <xsl:template match="sch:let[@xml:id = ('audience', 'contactLineType', 'coverage', 'detailLevel', 'descriptionOfComponentsType', 'level', 'maintenanceEventType', 'physDescStructuredType', 'publicationStatus', 'status', 'unitDateType')]">
+    <xsl:template match="sch:let[@xml:id = ('addressLineType', 'audience', 'contactLineType', 'coverage', 'detailLevel', 'descriptionOfComponentsType', 'level', 'maintenanceEventType', 'maintenanceStatus', 'physDescStructuredType', 'publicationStatus', 'status', 'unitDateType')]">
         <xsl:variable name="list" select="@xml:id"/>
         <xsl:message select="$list"/>
         <xsl:copy>
