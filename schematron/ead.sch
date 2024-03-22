@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2024-03-21T19:43:47.146-04:00
+2024-03-21T19:57:39.423-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -144,8 +144,8 @@ ts-eas@archivists.org
       <option>inclusive</option>
    </sch:let>
    <sch:pattern>
-      <sch:rule context="ead:control[@dateEncoding][$check-dateEncoding-attribute]">
-         <sch:assert test="@dateEncoding = ('iso8601', 'otherDateEncoding')">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding".</sch:assert>
+      <sch:rule context="ead:control[$check-dateEncoding-attribute]">
+         <sch:assert test="@dateEncoding">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding" as enforced by the RNG and XSD schemas.</sch:assert>
       </sch:rule>
    </sch:pattern>
    <sch:pattern>
