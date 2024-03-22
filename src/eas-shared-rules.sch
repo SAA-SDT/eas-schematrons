@@ -16,7 +16,7 @@
     <sch:let name="check-repository-codes" value="if (*/*:control/@repositoryEncoding eq 'iso15511') then true() else false()"/>
     <sch:let name="check-date-attributes" value="if (*/*:control/@dateEncoding eq 'iso8601') then true() else false()"/>
     
-    <sch:let name="check-dateEncoding-attribute" value="if (//@standardDate[1] or //@notAfter[1] or *//@notAfter[1]) then true() else false()"/>
+    <sch:let name="check-dateEncoding-attribute" value="if (//@standardDate[1] or //@notAfter[1] or *//@notBefore[1]) then true() else false()"/>
     
     <!-- EAS Lists.  Refactor to adopt a declarative approach (and separate, as necessary.. this is just EAD4??) -->
     <sch:let name="check-address" value="if (*/*:control/@addressLineTypeEncoding eq 'EASList') then true() else false()"/>
@@ -51,7 +51,7 @@
     <!-- ensure dateEncoding control attribute is set if any of the 3 date attributes are set -->
     <sch:pattern>
         <sch:rule context="*:control[$check-dateEncoding-attribute]">
-            <sch:assert test="@dateEncoding">If the @standardDate, @notBefore, or @notAfter attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding" as enforced by the RNG and XSD schemas.</sch:assert>
+            <sch:assert test="@dateEncoding">If the @standardDate, @notAfter, or @notBefore attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding" as enforced by the RNG and XSD schemas.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
