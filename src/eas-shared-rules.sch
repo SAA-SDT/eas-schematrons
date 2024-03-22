@@ -51,7 +51,7 @@
     <!-- ensure dateEncoding control attribute is set if any of the 3 date attributes are set -->
     <sch:pattern>
         <sch:rule context="*:control[$check-dateEncoding-attribute]">
-            <sch:assert test="@dateEncoding">If the @standardDate, @fromDate, or @toDate attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding" as enforced by the RNG and XSD schemas.</sch:assert>
+            <sch:assert test="@dateEncoding">If the @standardDate, @notBefore, or @notAfter attributes are utilized in the file, then you must set @dateEncoding on the control element to either "iso8601" or "otherDateEncoding" as enforced by the RNG and XSD schemas.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
