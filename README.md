@@ -4,7 +4,7 @@
 
 This is the official repository for the Schematron files managed by TS-EAS. The Schematron that are managed in this repository specify additional tests that should be performed on documents associated with TS-EAS schemas, such as EAC-CPF 2.0, to ensure consistent encoding practices.
 
-The tests included in the output files of this repository (e.g. eac.sch) should be considered as a required extension of the base schema (e.g. eac.rng). For guidance how to associate both the Schematron and base schema files, see (link to BPG).
+The tests included in the output files of this repository (e.g. eac.sch) should be considered as a required extension of the base schema (e.g. eac.rng). For guidance how to associate both the Schematron and base schema files, see [https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Schematron].
 
 Implementers might also choose to add additional tests, depending on their own local or consortium requirements. For guidance on how to do this, see [https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Schematron].
 
