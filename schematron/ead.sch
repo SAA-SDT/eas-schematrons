@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-<<<<<<< HEAD
-2025-03-22T18:47:26.135146-04:00
-=======
 2025-03-23T17:22:03.088451-04:00
->>>>>>> ead4
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
