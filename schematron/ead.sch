@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2025-04-07T20:23:21.253057-04:00
+2025-04-07T20:30:35.013349-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -68,7 +68,16 @@ ts-eas@archivists.org
       <option>region</option>
       <option>street</option>
    </sch:let>
-   <sch:let name="agentType" xml:id="agentType"/>
+   <sch:let name="agentType" xml:id="agentType">
+      <option>corporateBody</option>
+      <option>family</option>
+      <option>group</option>
+      <option>human</option>
+      <option>mechanism</option>
+      <option>person</option>
+      <option>position</option>
+      <option>unknown</option>
+   </sch:let>
    <sch:let name="audience" xml:id="audience">
       <option>internal</option>
       <option>external</option>
@@ -155,8 +164,8 @@ ts-eas@archivists.org
       <sch:rule context="ead:*[@addressLineType][$check-address]">
          <sch:assert test="@addressLineType = $addressLineType/option"/>
       </sch:rule>
-      <sch:rule context="ead:*[@audience][$check-agent]">
-         <sch:assert test="@audience = $agentType/option"/>
+      <sch:rule context="ead:*[@agentType][$check-agent]">
+         <sch:assert test="@agentType = $agentType/option"/>
       </sch:rule>
       <sch:rule context="ead:*[@audience][$check-audience]">
          <sch:assert test="@audience = $audience/option"/>

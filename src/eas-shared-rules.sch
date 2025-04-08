@@ -62,8 +62,8 @@
         <sch:rule context="*[@addressLineType][$check-address]">
             <sch:assert test="@addressLineType = $addressLineType/option"/>
         </sch:rule>
-        <sch:rule context="*[@audience][$check-agent]">
-            <sch:assert test="@audience = $agentType/option"/>
+        <sch:rule context="*[@agentType][$check-agent]">
+            <sch:assert test="@agentType = $agentType/option"/>
         </sch:rule>
         <sch:rule context="*[@audience][$check-audience]">
             <sch:assert test="@audience = $audience/option"/>
