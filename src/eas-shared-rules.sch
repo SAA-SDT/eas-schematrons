@@ -20,6 +20,7 @@
     
     <!-- EAS Lists.  Refactor to adopt a declarative approach (and separate, as necessary.. this is just EAD4??) -->
     <sch:let name="check-address" value="if (*/*:control/@addressLineTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-agent" value="if (*/*:control/@agentTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-audience" value="if (*/*:control/@audienceEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-contactLineType" value="if (*/*:control/@contactLineTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-coverage" value="if (*/*:control/@coverageEncoding eq 'EASList') then true() else false()"/>
@@ -35,6 +36,7 @@
     
     
     <sch:let name="addressLineType" xml:id="addressLineType"/>
+    <sch:let name="agentType" xml:id="agentType"/>
     <sch:let name="audience" xml:id="audience"/>
     <sch:let name="contactLineType" xml:id="contactLineType"/>
     <sch:let name="coverage" xml:id="coverage"/>
@@ -59,6 +61,9 @@
     <sch:pattern>
         <sch:rule context="*[@addressLineType][$check-address]">
             <sch:assert test="@addressLineType = $addressLineType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@audience][$check-agent]">
+            <sch:assert test="@audience = $agentType/option"/>
         </sch:rule>
         <sch:rule context="*[@audience][$check-audience]">
             <sch:assert test="@audience = $audience/option"/>
