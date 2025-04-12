@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2025-04-12T12:22:24.591657-04:00
+2025-04-12T13:05:06.903151-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -46,7 +46,7 @@ ts-eas@archivists.org
             value="if (*/ead:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-extentType"
             value="if (*/ead:control/@extentTypeEncoding eq 'EASList') then true() else false()"/>
-   <sch:let name="check-function"
+   <sch:let name="check-functionType"
             value="if (*/ead:control/@functionEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-identity"
             value="if (*/ead:control/@identityTypeEncoding eq 'EASList') then true() else false()"/>

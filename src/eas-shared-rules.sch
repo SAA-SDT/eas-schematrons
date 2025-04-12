@@ -28,7 +28,7 @@
     <sch:let name="check-detailLevel" value="if (*/*:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-extentType" value="if (*/*:control/@extentTypeEncoding eq 'EASList') then true() else false()"/>
     <!-- formAvailableType -->
-    <sch:let name="check-function" value="if (*/*:control/@functionEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-functionType" value="if (*/*:control/@functionEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-identity" value="if (*/*:control/@identityTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-level" value="if (*/*:control/@levelEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-maintenanceEventType" value="if (*/*:control/@maintenanceEventTypeEncoding eq 'EASList') then true() else false()"/>
