@@ -116,8 +116,8 @@ ts-eas@archivists.org
     </xd:doc>
     <xsl:template match="sch:ns[not(@prefix = $schema)]"/>
 
-    <!-- again, change this!!! -->
-    <xsl:template match="sch:let[@xml:id = ('addressLineType', 'agentType', 'audience', 'contactLineType', 'coverage', 'detailLevel', 'descriptionOfComponentsType', 'level', 'maintenanceEventType', 'maintenanceStatus', 'physDescStructuredType', 'publicationStatus', 'status', 'unitDateType')]">
+    <!-- again, change this!!! we'll generate a dyanmic array of values, and then build out the rest in a future process. -->
+    <xsl:template match="sch:let[@xml:id = ('addressLineType', 'agentType', 'audience', 'contactLineType', 'coverage', 'descriptionOfComponentsType', 'detailLevel', 'extentType', 'functionType', 'identityType', 'level', 'maintenanceEventType', 'maintenanceStatus', 'placeType', 'publicationStatus', 'referredEntityType', 'status', 'subjectType', 'targetType', 'unitDateType')]">
         <xsl:variable name="list" select="@xml:id"/>
         <xsl:message select="$list"/>
         <xsl:copy>

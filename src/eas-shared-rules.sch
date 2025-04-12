@@ -24,30 +24,48 @@
     <sch:let name="check-audience" value="if (*/*:control/@audienceEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-contactLineType" value="if (*/*:control/@contactLineTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-coverage" value="if (*/*:control/@coverageEncoding eq 'EASList') then true() else false()"/>
-    <sch:let name="check-detailLevel" value="if (*/*:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-descriptionOfComponentsType" value="if (*/*:control/@descriptionOfComponentsTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-detailLevel" value="if (*/*:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-extentType" value="if (*/*:control/@extentTypeEncoding eq 'EASList') then true() else false()"/>
+    <!-- formAvailableType -->
+    <sch:let name="check-function" value="if (*/*:control/@functionEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-identity" value="if (*/*:control/@identityTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-level" value="if (*/*:control/@levelEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-maintenanceEventType" value="if (*/*:control/@maintenanceEventTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-maintenanceStatus" value="if (*/*:control/@maintenanceStatusEncoding eq 'EASList') then true() else false()"/>
-    <sch:let name="check-physDescStructuredType" value="if (*/*:control/@physDescStructuredTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-place" value="if (*/*:control/@placeTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-publicationStatus" value="if (*/*:control/@publicationStatusEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-referredEntityType" value="if (*/*:control/@referredEntityTypeEncoding eq 'EASList') then true() else false()"/>
+    <!-- relationType -->
     <sch:let name="check-status" value="if (*/*:control/@statusEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-subjectType" value="if (*/*:control/@subjectTypeEncoding eq 'EASList') then true() else false()"/>
+    <sch:let name="check-targetType" value="if (*/*:control/@targetTypeEncoding eq 'EASList') then true() else false()"/>
     <sch:let name="check-unitDateType" value="if (*/*:control/@unitDateTypeEncoding eq 'EASList') then true() else false()"/>
     
-    
+    <!-- update this process to build automatically from source files (whether Markdown or otherwise) -->
     <sch:let name="addressLineType" xml:id="addressLineType"/>
     <sch:let name="agentType" xml:id="agentType"/>
     <sch:let name="audience" xml:id="audience"/>
     <sch:let name="contactLineType" xml:id="contactLineType"/>
     <sch:let name="coverage" xml:id="coverage"/>
-    <sch:let name="detailLevel" xml:id="detailLevel"/>
     <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType"/>
+    <sch:let name="detailLevel" xml:id="detailLevel"/>
+    <sch:let name="extentType" xml:id="extentType"/>
+    <!-- no list yet for formAvailableType -->
+    <sch:let name="formAvailableType" xml:id="formAvailableType"/>
+    <sch:let name="functionType" xml:id="functionType"/>
+    <sch:let name="identityType" xml:id="identityType"/>
     <sch:let name="level" xml:id="level"/>
     <sch:let name="maintenanceEventType" xml:id="maintenanceEventType"/>
     <sch:let name="maintenanceStatus" xml:id="maintenanceStatus"/>
-    <sch:let name="physDescStructuredType" xml:id="physDescStructuredType"/>
+    <sch:let name="placeType" xml:id="placeType"/>
     <sch:let name="publicationStatus" xml:id="publicationStatus"/>
+    <sch:let name="referredEntityType" xml:id="referredEntityType"/>
+    <!-- no list yet for relationType -->
+    <sch:let name="relationType" xml:id="relationType"/>
     <sch:let name="status" xml:id="status"/>
+    <sch:let name="subjectType" xml:id="subjectType"/>
+    <sch:let name="targetType" xml:id="targetType"/>
     <sch:let name="unitDateType" xml:id="unitDateType"/>
     
     <!-- ensure dateEncoding control attribute is set if any of the 3 date attributes are set -->
@@ -74,11 +92,21 @@
         <sch:rule context="*[@coverage][$check-coverage]">
             <sch:assert test="@coverage = $coverage/option"/>
         </sch:rule>
+        <sch:rule context="*[@descriptionOfComponentsType][$check-descriptionOfComponentsType]">
+            <sch:assert test="@descriptionOfComponentsType = $descriptionOfComponentsType/option"/>
+        </sch:rule>
         <sch:rule context="*[@detailLevel][$check-detailLevel]">
             <sch:assert test="@detailLevel = $detailLevel/option"/>
         </sch:rule>
-        <sch:rule context="*[@descriptionOfComponentsType][$check-descriptionOfComponentsType]">
-            <sch:assert test="@descriptionOfComponentsType = $descriptionOfComponentsType/option"/>
+        <sch:rule context="*[@extentType][$check-extentType]">
+            <sch:assert test="@extentType = $extentType/option"/>
+        </sch:rule>
+        <!-- formAvailableType -->
+        <sch:rule context="*[@functionType][$check-functionType]">
+            <sch:assert test="@functionType = $functionType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@identityType][$check-identity]">
+            <sch:assert test="@identityType = $identityType/option"/>
         </sch:rule>
         <sch:rule context="*[@level][$check-level]">
             <sch:assert test="@level = $level/option"/>
@@ -89,14 +117,24 @@
         <sch:rule context="*[@maintenanceStatus][$check-maintenanceStatus]">
             <sch:assert test="@maintenanceStatus = $maintenanceStatus/option"/>
         </sch:rule>
-        <sch:rule context="*[@physDescStructuredType][$check-physDescStructuredType]">
-            <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>
+        <sch:rule context="*[@placeType][$check-place]">
+            <sch:assert test="@placeType = $placeType/option"/>
         </sch:rule>
         <sch:rule context="*[@publicationStatus][$check-publicationStatus]">
             <sch:assert test="@publicationStatus = $publicationStatus/option"/>
         </sch:rule>
+        <sch:rule context="*[@referredEntityType][$check-referredEntityType]">
+            <sch:assert test="@referredEntityType = $referredEntityType/option"/>
+        </sch:rule>
+        <!-- relationType -->
         <sch:rule context="*[@status][$check-status]">
             <sch:assert test="@status = $status/option"/>
+        </sch:rule>
+        <sch:rule context="*[@subjectType][$check-subjectType]">
+            <sch:assert test="@subjectType = $subjectType/option"/>
+        </sch:rule>
+        <sch:rule context="*[@targetType][$check-targetType]">
+            <sch:assert test="@targetType = $targetType/option"/>
         </sch:rule>
         <sch:rule context="*[@unitDateType][$check-unitDateType]">
             <sch:assert test="@unitDateType = $unitDateType/option"/>

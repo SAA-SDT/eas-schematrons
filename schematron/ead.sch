@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This schematron file has been generated automatically, and was last updated at: 
-2025-04-07T20:30:35.013349-04:00
+2025-04-12T12:22:24.591657-04:00
                         
 If you would like to contribute to this project, please see: 
 https://github.com/SAA-SDT/TS-EAS-subteam-notes/wiki/Contributing-to-the-EAS-standards
@@ -40,22 +40,34 @@ ts-eas@archivists.org
             value="if (*/ead:control/@contactLineTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-coverage"
             value="if (*/ead:control/@coverageEncoding eq 'EASList') then true() else false()"/>
-   <sch:let name="check-detailLevel"
-            value="if (*/ead:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-descriptionOfComponentsType"
             value="if (*/ead:control/@descriptionOfComponentsTypeEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-detailLevel"
+            value="if (*/ead:control/@detailLevelEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-extentType"
+            value="if (*/ead:control/@extentTypeEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-function"
+            value="if (*/ead:control/@functionEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-identity"
+            value="if (*/ead:control/@identityTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-level"
             value="if (*/ead:control/@levelEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-maintenanceEventType"
             value="if (*/ead:control/@maintenanceEventTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-maintenanceStatus"
             value="if (*/ead:control/@maintenanceStatusEncoding eq 'EASList') then true() else false()"/>
-   <sch:let name="check-physDescStructuredType"
-            value="if (*/ead:control/@physDescStructuredTypeEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-place"
+            value="if (*/ead:control/@placeTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-publicationStatus"
             value="if (*/ead:control/@publicationStatusEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-referredEntityType"
+            value="if (*/ead:control/@referredEntityTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-status"
             value="if (*/ead:control/@statusEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-subjectType"
+            value="if (*/ead:control/@subjectTypeEncoding eq 'EASList') then true() else false()"/>
+   <sch:let name="check-targetType"
+            value="if (*/ead:control/@targetTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="check-unitDateType"
             value="if (*/ead:control/@unitDateTypeEncoding eq 'EASList') then true() else false()"/>
    <sch:let name="addressLineType" xml:id="addressLineType">
@@ -94,15 +106,33 @@ ts-eas@archivists.org
       <option>part</option>
       <option>whole</option>
    </sch:let>
+   <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType">
+      <option>analyticOverview</option>
+      <option>combined</option>
+      <option>inDepth</option>
+   </sch:let>
    <sch:let name="detailLevel" xml:id="detailLevel">
       <option>basic</option>
       <option>extended</option>
       <option>minimal</option>
    </sch:let>
-   <sch:let name="descriptionOfComponentsType" xml:id="descriptionOfComponentsType">
-      <option>analyticOverview</option>
-      <option>combined</option>
-      <option>inDepth</option>
+   <sch:let name="extentType" xml:id="extentType">
+      <option>carrier</option>
+      <option>materialType</option>
+      <option>spaceOccupied</option>
+   </sch:let>
+   <sch:let name="formAvailableType" xml:id="formAvailableType"/>
+   <sch:let name="functionType" xml:id="functionType">
+      <option>activity</option>
+      <option>businessProcess</option>
+      <option>function</option>
+      <option>subfunction</option>
+      <option>task</option>
+      <option>transaction</option>
+   </sch:let>
+   <sch:let name="identityType" xml:id="identityType">
+      <option>acquired</option>
+      <option>given</option>
    </sch:let>
    <sch:let name="level" xml:id="level">
       <option>class</option>
@@ -135,21 +165,63 @@ ts-eas@archivists.org
       <option>new</option>
       <option>revised</option>
    </sch:let>
-   <sch:let name="physDescStructuredType" xml:id="physDescStructuredType">
-      <option>carrier</option>
-      <option>materialType</option>
-      <option>spaceOccupied</option>
+   <sch:let name="placeType" xml:id="placeType">
+      <option>administrativeBoundaryFeatures</option>
+      <option>areaFeatures</option>
+      <option>hydrographicFeatures</option>
+      <option>hypsographicFeatures</option>
+      <option>populatedPlaceFeatures</option>
+      <option>roadOrRailroadFeatures</option>
+      <option>spotFeatures</option>
+      <option>underseaFeatures</option>
+      <option>vegetationFeatures</option>
    </sch:let>
    <sch:let name="publicationStatus" xml:id="publicationStatus">
       <option>approved</option>
       <option>inProcess</option>
       <option>published</option>
    </sch:let>
+   <sch:let name="referredEntityType" xml:id="referredEntityType">
+      <option>corpName</option>
+      <option>famName</option>
+      <option>function</option>
+      <option>genreForm</option>
+      <option>geogName</option>
+      <option>name</option>
+      <option>occupation</option>
+      <option>person</option>
+      <option>subject</option>
+      <option>title</option>
+   </sch:let>
+   <sch:let name="relationType" xml:id="relationType"/>
    <sch:let name="status" xml:id="status">
       <option>alternative</option>
       <option>authorized</option>
       <option>ongoing</option>
       <option>unknown</option>
+   </sch:let>
+   <sch:let name="subjectType" xml:id="subjectType">
+      <option>genre</option>
+      <option>mandate</option>
+      <option>occupation</option>
+      <option>publishedResource</option>
+      <option>recordType</option>
+      <option>theme</option>
+   </sch:let>
+   <sch:let name="targetType" xml:id="targetType">
+      <option>corporateBody</option>
+      <option>family</option>
+      <option>function</option>
+      <option>group</option>
+      <option>instantiation</option>
+      <option>mechanism</option>
+      <option>person</option>
+      <option>person</option>
+      <option>position</option>
+      <option>record</option>
+      <option>recordSet</option>
+      <option>recordPart</option>
+      <option>resource</option>
    </sch:let>
    <sch:let name="unitDateType" xml:id="unitDateType">
       <option>bulk</option>
@@ -176,11 +248,20 @@ ts-eas@archivists.org
       <sch:rule context="ead:*[@coverage][$check-coverage]">
          <sch:assert test="@coverage = $coverage/option"/>
       </sch:rule>
+      <sch:rule context="ead:*[@descriptionOfComponentsType][$check-descriptionOfComponentsType]">
+         <sch:assert test="@descriptionOfComponentsType = $descriptionOfComponentsType/option"/>
+      </sch:rule>
       <sch:rule context="ead:*[@detailLevel][$check-detailLevel]">
          <sch:assert test="@detailLevel = $detailLevel/option"/>
       </sch:rule>
-      <sch:rule context="ead:*[@descriptionOfComponentsType][$check-descriptionOfComponentsType]">
-         <sch:assert test="@descriptionOfComponentsType = $descriptionOfComponentsType/option"/>
+      <sch:rule context="ead:*[@extentType][$check-extentType]">
+         <sch:assert test="@extentType = $extentType/option"/>
+      </sch:rule>
+      <sch:rule context="ead:*[@functionType][$check-functionType]">
+         <sch:assert test="@functionType = $functionType/option"/>
+      </sch:rule>
+      <sch:rule context="ead:*[@identityType][$check-identity]">
+         <sch:assert test="@identityType = $identityType/option"/>
       </sch:rule>
       <sch:rule context="ead:*[@level][$check-level]">
          <sch:assert test="@level = $level/option"/>
@@ -191,14 +272,23 @@ ts-eas@archivists.org
       <sch:rule context="ead:*[@maintenanceStatus][$check-maintenanceStatus]">
          <sch:assert test="@maintenanceStatus = $maintenanceStatus/option"/>
       </sch:rule>
-      <sch:rule context="ead:*[@physDescStructuredType][$check-physDescStructuredType]">
-         <sch:assert test="@physDescStructuredType = $physDescStructuredType/option"/>
+      <sch:rule context="ead:*[@placeType][$check-place]">
+         <sch:assert test="@placeType = $placeType/option"/>
       </sch:rule>
       <sch:rule context="ead:*[@publicationStatus][$check-publicationStatus]">
          <sch:assert test="@publicationStatus = $publicationStatus/option"/>
       </sch:rule>
+      <sch:rule context="ead:*[@referredEntityType][$check-referredEntityType]">
+         <sch:assert test="@referredEntityType = $referredEntityType/option"/>
+      </sch:rule>
       <sch:rule context="ead:*[@status][$check-status]">
          <sch:assert test="@status = $status/option"/>
+      </sch:rule>
+      <sch:rule context="ead:*[@subjectType][$check-subjectType]">
+         <sch:assert test="@subjectType = $subjectType/option"/>
+      </sch:rule>
+      <sch:rule context="ead:*[@targetType][$check-targetType]">
+         <sch:assert test="@targetType = $targetType/option"/>
       </sch:rule>
       <sch:rule context="ead:*[@unitDateType][$check-unitDateType]">
          <sch:assert test="@unitDateType = $unitDateType/option"/>

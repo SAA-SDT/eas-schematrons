@@ -96,6 +96,17 @@
             <label>whole</label>
         </concept>
     </list>
+    <list id="descriptionOfComponentsType">
+        <concept>
+            <label>analyticOverview</label>
+        </concept>
+        <concept>
+            <label>combined</label>
+        </concept>
+        <concept>
+            <label>inDepth</label>
+        </concept>
+    </list>
     <list id="detailLevel">
         <concept>
             <label>basic</label>
@@ -107,15 +118,48 @@
             <label>minimal</label>
         </concept>
     </list>
-    <list id="descriptionOfComponentsType">
+    <list id="extentType">
         <concept>
-            <label>analyticOverview</label>
+            <label>carrier</label>
         </concept>
         <concept>
-            <label>combined</label>
+            <label>materialType</label>
         </concept>
         <concept>
-            <label>inDepth</label>
+            <label>spaceOccupied</label>
+        </concept>
+    </list>
+    <list id="formAvailableType">
+        <concept>
+            <label/>
+        </concept>
+    </list>
+    <list id="functionType">
+        <concept>
+            <label>activity</label>
+        </concept>
+        <concept>
+            <label>businessProcess</label>
+        </concept>
+        <concept>
+            <label>function</label>
+        </concept>
+        <concept>
+            <label>subfunction</label>
+        </concept>
+        <concept>
+            <label>task</label>
+        </concept>
+        <concept>
+            <label>transaction</label>
+        </concept>
+    </list>
+    <list id="identityType">
+        <concept>
+            <label>acquired</label>
+        </concept>
+        <concept>
+            <label>given</label>
         </concept>
     </list>
     <list id="level">
@@ -199,15 +243,33 @@
             <label>revised</label>
         </concept>
     </list>
-    <list id="physDescStructuredType">
+    <list id="placeType">
         <concept>
-            <label>carrier</label>
+            <label>administrativeBoundaryFeatures</label>
         </concept>
         <concept>
-            <label>materialType</label>
+            <label>areaFeatures</label>
         </concept>
         <concept>
-            <label>spaceOccupied</label>
+            <label>hydrographicFeatures</label>
+        </concept>
+        <concept>
+            <label>hypsographicFeatures</label>
+        </concept>
+        <concept>
+            <label>populatedPlaceFeatures</label>
+        </concept>
+        <concept>
+            <label>roadOrRailroadFeatures</label>
+        </concept>
+        <concept>
+            <label>spotFeatures</label>
+        </concept>
+        <concept>
+            <label>underseaFeatures</label>
+        </concept>
+        <concept>
+            <label>vegetationFeatures</label>
         </concept>
     </list>
     <list id="publicationStatus">
@@ -219,6 +281,43 @@
         </concept>
         <concept>
             <label>published</label>
+        </concept>
+    </list>
+    <list id="referredEntityType">
+        <concept>
+            <label>corpName</label>
+        </concept>
+        <concept>
+            <label>famName</label>
+        </concept>
+        <concept>
+            <label>function</label>
+        </concept>
+        <concept>
+            <label>genreForm</label>
+        </concept>
+        <concept>
+            <label>geogName</label>
+        </concept>
+        <concept>
+            <label>name</label>
+        </concept>
+        <concept>
+            <label>occupation</label>
+        </concept>
+        <concept>
+            <label>person</label>
+        </concept>
+        <concept>
+            <label>subject</label>
+        </concept>
+        <concept>
+            <label>title</label>
+        </concept>
+    </list>
+    <list id="relationType">
+        <concept>
+            <label/>
         </concept>
     </list>
     <list id="status">
@@ -233,6 +332,67 @@
         </concept>
         <concept>
             <label>unknown</label>
+        </concept>
+    </list>
+    <list id="subjectType">
+        <concept>
+            <label>genre</label>
+        </concept>
+        <concept>
+            <label>mandate</label>
+        </concept>
+        <concept>
+            <label>occupation</label>
+        </concept>
+        <concept>
+            <label>publishedResource</label>
+        </concept>
+        <concept>
+            <label>recordType</label>
+        </concept>
+        <concept>
+            <label>theme</label>
+        </concept>
+    </list>
+    <list id="targetType">
+        <concept>
+            <label>corporateBody</label>
+        </concept>
+        <concept>
+            <label>family</label>
+        </concept>
+        <concept>
+            <label>function</label>
+        </concept>
+        <concept>
+            <label>group</label>
+        </concept>
+        <concept>
+            <label>instantiation</label>
+        </concept>
+        <concept>
+            <label>mechanism</label>
+        </concept>
+        <concept>
+            <label>person</label>
+        </concept>
+        <concept>
+            <label>person</label>
+        </concept>
+        <concept>
+            <label>position</label>
+        </concept>
+        <concept>
+            <label>record</label>
+        </concept>
+        <concept>
+            <label>recordSet</label>
+        </concept>
+        <concept>
+            <label>recordPart</label>
+        </concept>
+        <concept>
+            <label>resource</label>
         </concept>
     </list>
     <list id="unitDateType">
